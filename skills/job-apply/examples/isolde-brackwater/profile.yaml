@@ -1,0 +1,54 @@
+# Job Apply profile: the contact block and the filters every role is gated against.
+# Sample person: every value here is invented.
+updated: 2026-10-20
+
+name:
+  first: Isolde
+  last: Brackwater
+
+contact:
+  location: Leeds, UK
+  right_to_work_line: Full right to work in the UK, no sponsorship needed
+  phone: "+44 7700 900461"
+  email: isolde.brackwater@example.com
+  links:
+    - label: LinkedIn
+      url: https://www.linkedin.com/in/example-isolde
+    - label: GitHub
+      url: https://github.com/example-isolde
+
+filters:
+  location:
+    base: Leeds, UK
+    remote: remote-first          # remote-only | remote-first | hybrid-ok | onsite-ok
+    max_office_days_per_month: 4
+    hard: false                   # a preference: score it, do not stop on it
+  salary:
+    floor: 90000
+    currency: GBP
+    basis: base                   # base | total
+    hard: true
+    default_phrasing: "GBP {X} base, flexible depending on the overall package"
+  right_to_work:
+    countries: [UK]
+    needs_sponsorship_elsewhere: true
+  excluded_industries:
+    - name: adtech and tracking
+      reason: does not want to build user tracking
+      includes_roles_serving_them: true
+      hard: true
+    - name: tobacco and vaping
+      reason: personal choice
+      includes_roles_serving_them: true
+      hard: true
+  excluded_employers: []
+  notice: 1 month
+  available_from: one month after an accepted offer
+  seniority_target: [Engineering Manager, Senior Engineering Manager, Head of Mobile]
+  must_haves:
+    - owns a product area, not only delivery
+    - hiring authority for own team
+
+output:
+  cv_variant: modern             # editorial | modern | executive
+  applications_dir: applications

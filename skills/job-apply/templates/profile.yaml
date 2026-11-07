@@ -1,0 +1,41 @@
+# Job Apply profile: the contact block and the filters every role is gated against.
+# Every filter says hard: true (stop on fail) or hard: false (score it and name the trade-off).
+updated:
+
+name:
+  first:
+  last:
+
+contact:
+  location:
+  right_to_work_line:
+  phone: ""
+  email:
+  links: []                       # - {label: LinkedIn, url: https://...}
+
+filters:
+  location:
+    base:
+    remote: remote-first          # remote-only | remote-first | hybrid-ok | onsite-ok
+    max_office_days_per_month:
+    hard: false
+  salary:
+    floor:
+    currency:
+    basis: base                   # base | total
+    hard: true
+    default_phrasing: "{X} base, flexible depending on the overall package"
+  right_to_work:
+    countries: []
+    needs_sponsorship_elsewhere: true
+  excluded_industries: []         # - {name: , reason: , includes_roles_serving_them: true, hard: true}
+  excluded_employers: []          # - {name: , reason: }
+  notice:
+  available_from:
+  unavailable: []                 # - YYYY-MM-DD to YYYY-MM-DD
+  seniority_target: []
+  must_haves: []
+
+output:
+  cv_variant: editorial           # editorial | modern | executive
+  applications_dir: applications

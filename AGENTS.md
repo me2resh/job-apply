@@ -1,0 +1,7 @@
+# Agent instructions for this repository
+
+This repository is a reusable skill called **Job Apply**: tailored job applications that are true in every line. It keeps one master fact bank per person, built once by interview, and turns each job ad into a gated, reviewed CV, cover letter and form answers drawn only from that bank.
+
+When a task asks you to apply for a job, tailor a CV, write a cover letter or recruiter message, answer an application form, or set up or update someone's career facts, read `skills/job-apply/SKILL.md` first and follow it. The setup interview is in `skills/job-apply/references/setup.md`, the file formats in `references/formats.md`, the JD fetching and gate check in `references/gates.md`, the writing rules in `references/writing-rules.md`, the reviewer brief in `references/reviewer.md`, and the print styles in `references/print-styles.md`. A worked example for an invented person is in `skills/job-apply/examples/`.
+
+Non-negotiable rules from the skill: every claim traces to the user's `fact-bank.md`, and a missing fact is asked for or left out; durations round down and headcounts are exact; influence is never written as line management; the gate verdict is shown before any document is written; no em or en dashes; the reviewer runs in a separate context from the author; precedence is honesty, then anti-cringe, then voice, then reviewer findings, then JD criteria; nothing is sent for the user, and they read the final text aloud and rewrite at least one sentence before sending.

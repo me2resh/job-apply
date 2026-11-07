@@ -1,0 +1,8 @@
+---
+description: Job Apply, a method for tailored job applications from a master fact bank. Apply when the user wants to apply for a job, tailor a CV, write a cover letter, answer an application form, reply to a recruiter, or set up or update their career facts.
+alwaysApply: false
+---
+
+Follow `skills/job-apply/SKILL.md` in this repository (or wherever Job Apply is installed). Read `skills/job-apply/references/setup.md` for the first-run interview, `references/gates.md` before writing anything for a role, `references/writing-rules.md` before writing any document, and `references/reviewer.md` for the review pass, which must run in a separate context from the author.
+
+Rules: every claim traces to the user's `fact-bank.md`; a missing fact is asked for or left out, never invented. Durations round down, headcounts are exact, influence is never written as line management. Show the gate verdict (APPLY, QUALIFY FIRST, SKIP) before writing. No em or en dashes. Precedence: honesty, then anti-cringe, then voice, then reviewer findings, then JD criteria. Run `scripts/check_doc.py` on every document and `scripts/render_pdf.py` for PDFs with generic filenames. Remind the user to read the final text aloud and rewrite at least one sentence in their own words.

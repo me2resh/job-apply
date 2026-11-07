@@ -1,0 +1,14 @@
+{
+  "name": "job-apply",
+  "description": "Job Apply: tailored, truthful job applications from a master fact bank, as a plugin.",
+  "owner": { "name": "Ahmed Mohamed", "url": "https://github.com/me2resh" },
+  "plugins": [
+    {
+      "name": "job-apply",
+      "source": ".",
+      "description": "Build your fact bank once, then turn any job ad into a gated, reviewed CV and cover letter that say nothing the fact bank cannot back.",
+      "version": "0.1.0",
+      "category": "productivity"
+    }
+  ]
+}

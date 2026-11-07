@@ -1,0 +1,11 @@
+{
+  "name": "job-apply",
+  "displayName": "Job Apply",
+  "version": "0.1.0",
+  "description": "Tailored job applications that are true in every line: a master fact bank built once by interview, then a gated, reviewed CV, cover letter and form answers for each job ad, rendered to ATS-safe PDFs.",
+  "author": { "name": "Ahmed Mohamed", "url": "https://github.com/me2resh/job-apply" },
+  "homepage": "https://me2resh.github.io/job-apply/",
+  "repository": "https://github.com/me2resh/job-apply",
+  "license": "MIT",
+  "keywords": ["job application", "CV", "resume", "cover letter", "ATS", "job hunt", "fact bank", "interview prep"]
+}
