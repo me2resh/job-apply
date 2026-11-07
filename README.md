@@ -4,7 +4,7 @@
 
 Job Apply is an add-on for Claude Code, Codex and Cursor (and anything else that reads the Agent Skills format, with a rule file for GitHub Copilot). The first time you run it, it builds your master fact bank by interview: it reads your CV, LinkedIn export and reviews, then asks for the numbers, baselines, your part against the team's, and the evidence. After that, give it a job ad and it checks the role against your own filters, maps every criterion to a true fact, writes a tailored CV and cover letter, has a separate reviewer attack them, and renders ATS-safe PDFs. Nothing it writes says more than your fact bank can back.
 
-Site: https://me2resh.github.io/job-apply/ (placeholder until published)
+Site: https://me2resh.github.io/job-apply/
 
 ## What it does
 
