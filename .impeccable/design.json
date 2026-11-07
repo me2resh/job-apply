@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-07T07:06:37.929095+00:00",
+  "title": "Design System: Job Apply",
+  "extensions": {
+    "colorMeta": {
+      "review-indigo": {
+        "role": "primary",
+        "displayName": "Review Indigo",
+        "canonical": "#3b33a6",
+        "tonalRamp": [
+          "#1c1a32",
+          "#2b2857",
+          "#393384",
+          "#443bba",
+          "#7069c9",
+          "#a09cd3",
+          "#cbc9e3",
+          "#f0eff5"
+        ]
+      },
+      "review-paper": {
+        "role": "neutral",
+        "displayName": "Review Paper",
+        "canonical": "#f2f1f7",
+        "tonalRamp": [
+          "#22202c",
+          "#38344c",
+          "#4e4771",
+          "#655a9b",
+          "#8981b1",
+          "#aea9c6",
+          "#d2d0dd",
+          "#f1f1f4"
+        ]
+      },
+      "review-sheet": {
+        "role": "neutral",
+        "displayName": "Review Sheet",
+        "canonical": "#fcfcff",
+        "tonalRamp": [
+          "#10103c",
+          "#13136c",
+          "#0f0fa8",
+          "#0303f2",
+          "#3f3ff3",
+          "#8383ec",
+          "#bebeee",
+          "#ececf8"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1c1a35",
+        "tonalRamp": [
+          "#201f2e",
+          "#33304f",
+          "#464276",
+          "#5852a3",
+          "#7f7ab8",
+          "#a8a6ca",
+          "#cfcede",
+          "#f1f0f4"
+        ]
+      },
+      "ink-quiet": {
+        "role": "neutral",
+        "displayName": "Ink Quiet",
+        "canonical": "#4b4868",
+        "tonalRamp": [
+          "#23222a",
+          "#393848",
+          "#514e6a",
+          "#696590",
+          "#8c89a9",
+          "#b0aec1",
+          "#d3d2db",
+          "#f1f1f3"
+        ]
+      },
+      "struck-rose": {
+        "role": "state",
+        "displayName": "Struck Rose",
+        "canonical": "#99152f",
+        "tonalRamp": [
+          "#37151c",
+          "#621e2b",
+          "#962239",
+          "#d52043",
+          "#dd5570",
+          "#df909f",
+          "#e9c4cb",
+          "#f7eef0"
+        ]
+      },
+      "traced-mint": {
+        "role": "state",
+        "displayName": "Traced Mint",
+        "canonical": "#12633a",
+        "tonalRamp": [
+          "#173626",
+          "#215f3f",
+          "#27915b",
+          "#28cd79",
+          "#5bd798",
+          "#93dcb7",
+          "#c5e7d6",
+          "#eef6f2"
+        ]
+      },
+      "partial-amber": {
+        "role": "state",
+        "displayName": "Partial Amber",
+        "canonical": "#734700",
+        "tonalRamp": [
+          "#3c2b10",
+          "#6c4a13",
+          "#a86e0f",
+          "#f29603",
+          "#f3ae3f",
+          "#ecc483",
+          "#eedcbe",
+          "#f8f4ec"
+        ]
+      },
+      "lit-lilac": {
+        "role": "neutral",
+        "displayName": "Lit Lilac",
+        "canonical": "#e6e3fb",
+        "tonalRamp": [
+          "#1a1637",
+          "#271e61",
+          "#312395",
+          "#3721d4",
+          "#6756dc",
+          "#9a90df",
+          "#c9c4e8",
+          "#efeef7"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The page promise only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section heads."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Step and sub-section heads."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose, held to 65ch."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Diff lines, files, commands, fact ids."
+      },
+      "verdict": {
+        "displayName": "Verdict",
+        "purpose": "The single display-scale FIX."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Verdict tokens and WHY labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "comment-lift",
+        "value": "0 10px 28px -12px rgba(28, 26, 53, 0.28), 0 2px 6px -2px rgba(28, 26, 53, 0.12)",
+        "purpose": "Reviewer comments anchored under a line; the only lifted surface."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The strike draw on the hero's removed line (900ms), the added line settling (700ms), fact highlight (220ms). Off under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "720px"
+      },
+      {
+        "name": "tabs-compact",
+        "value": "600px"
+      },
+      {
+        "name": "rail",
+        "value": "960px"
+      },
+      {
+        "name": "two-column",
+        "value": "1100px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Copy command",
+      "kind": "button",
+      "refersTo": "command-copy",
+      "description": "The primary action: a command with a joined copy button.",
+      "html": "<div class=\"ds-cmd\"><code>/plugin install job-apply --marketplace me2resh/job-apply</code><button class=\"ds-copy\" type=\"button\">Copy</button></div>",
+      "css": ".ds-cmd{display:flex;border:1px solid #b9b6cf;background:#fcfcff;border-radius:8px;max-width:100%}.ds-cmd code{flex:1;padding:13px 16px;font:400 14px/1.5 'Martian Mono',ui-monospace,monospace;font-stretch:87.5%;color:#1c1a35;overflow-wrap:anywhere}.ds-copy{border:0;background:#3b33a6;color:#fff;font:700 14px/1 'Schibsted Grotesk',system-ui,sans-serif;padding:0 16px;min-height:44px;border-radius:0 7px 7px 0;cursor:pointer}.ds-copy:hover{background:#4a42b8}.ds-copy:focus-visible{outline:2px solid #3b33a6;outline-offset:2px}"
+    },
+    {
+      "name": "Verdict tokens",
+      "kind": "chip",
+      "refersTo": "verdict-fix",
+      "description": "State tokens under the colour law.",
+      "html": "<span class=\"ds-tok ds-fix\">FIX</span> <span class=\"ds-tok ds-ship\">SHIP</span> <span class=\"ds-tok ds-partial\">QUALIFY FIRST</span>",
+      "css": ".ds-tok{display:inline-flex;font:700 11px/1.3 'Martian Mono',ui-monospace,monospace;font-stretch:87.5%;letter-spacing:.04em;padding:3px 7px;border-radius:4px;border:1px solid}.ds-fix{background:#fbe4e8;color:#99152f;border-color:#efb3bf}.ds-ship{background:#dcf2e4;color:#12633a;border-color:#9fd6b3}.ds-partial{background:#fbeecb;color:#734700;border-color:#e8c77a}"
+    },
+    {
+      "name": "Diff hunk",
+      "kind": "custom",
+      "refersTo": "hunk",
+      "description": "Removed and added lines with line number, sign and blame column.",
+      "html": "<div class=\"ds-hunk\"><div class=\"ds-head\"><b>cv.md</b> &middot; Profile</div><div class=\"ds-line ds-del\"><span>17</span><span>-</span><span class=\"ds-strike\">with four years leading a team of 7 Android and iOS engineers</span><span class=\"ds-bl\">reviewer, round 1</span></div><div class=\"ds-line ds-add\"><span>17</span><span>+</span><span>A team of 7 reports to me, including 5 Android and iOS engineers.</span><span class=\"ds-bl\">fact-bank.md</span></div></div>",
+      "css": ".ds-hunk{border:1px solid #b9b6cf;border-radius:6px;background:#fcfcff;overflow:hidden;font:400 13px/1.6 'Martian Mono',ui-monospace,monospace;font-stretch:87.5%}.ds-head{padding:10px 16px;border-bottom:1px solid #d8d6e6;color:#4b4868;font-size:12px}.ds-head b{color:#1c1a35;font-weight:600}.ds-line{display:grid;grid-template-columns:3.5ch 2ch minmax(0,1fr) 12rem;padding:6px 0 6px 8px}.ds-del{background:#fbe4e8;color:#99152f}.ds-add{background:#dcf2e4;color:#12633a}.ds-strike{text-decoration:line-through}.ds-bl{font-size:11px;padding-left:12px;border-left:1px solid currentColor}"
+    },
+    {
+      "name": "Review comment",
+      "kind": "card",
+      "refersTo": "hunk",
+      "description": "The reviewer's finding anchored under a line; the only lifted surface.",
+      "html": "<article class=\"ds-comment\"><header><span class=\"ds-tok ds-fix\">FIX</span> <b>Inflation</b></header><p>The fact bank says 5 mobile engineers, 1 backend engineer and 1 QA engineer.</p></article>",
+      "css": ".ds-comment{max-width:46rem;background:#fcfcff;border:1px solid #b9b6cf;border-radius:8px;box-shadow:0 10px 28px -12px rgba(28,26,53,.28),0 2px 6px -2px rgba(28,26,53,.12);font:400 15px/1.55 'Schibsted Grotesk',system-ui,sans-serif;color:#1c1a35}.ds-comment header{padding:10px 14px;border-bottom:1px solid #d8d6e6;font-size:13px}.ds-comment p{margin:0;padding:12px 14px 14px}.ds-tok{font:700 11px/1.3 'Martian Mono',monospace;padding:3px 7px;border-radius:4px}.ds-fix{background:#fbe4e8;color:#99152f;border:1px solid #efb3bf}"
+    },
+    {
+      "name": "Rail navigation",
+      "kind": "nav",
+      "refersTo": "rail",
+      "description": "Full-height indigo rail with section links.",
+      "html": "<nav class=\"ds-rail\"><a href=\"#\" aria-current=\"true\"><span>1</span>What it is</a><a href=\"#\"><span>2</span>How it runs</a></nav>",
+      "css": ".ds-rail{background:#3b33a6;padding:16px;width:232px;display:grid;gap:2px}.ds-rail a{display:flex;gap:12px;align-items:baseline;padding:7px 12px;border-radius:6px;color:#d6d3f7;text-decoration:none;font:400 15px/1.4 'Schibsted Grotesk',system-ui,sans-serif}.ds-rail a span{font:400 11px 'Martian Mono',monospace}.ds-rail a:hover,.ds-rail a[aria-current=true]{background:#4a42b8;color:#fff}.ds-rail a[aria-current=true]{font-weight:700}.ds-rail a:focus-visible{outline:2px solid #fff;outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Review Diff",
+    "overview": "The page is a code review of a job application. Claims are diff lines; every line carries a blame column that names the fact it rests on, and the reviewer's comments sit on the lines they caught.\n\nThe ground is a cool violet-grey review paper with white sheets for every file, diff and comment. One indigo owns structure. Colour beyond that is state and nothing else.\n\nDensity sits between documentation and a review tool: large confident grotesk headings, generous section spacing, and mono only where the content is code, data, file names or verdicts.",
+    "keyCharacteristics": [
+      "A full-height indigo rail on desktop that becomes a top bar on phones.",
+      "Diff hunks with line numbers, a sign column and a blame column as the main content surface.",
+      "Review comments as the only lifted surfaces.",
+      "Verdict tokens (FIX, SHIP, APPLY, SKIP, QUALIFY FIRST, strong, partial, gap) in a fixed colour law.",
+      "One display-scale verdict, set once."
+    ],
+    "rules": [
+      {
+        "name": "The Colour Law Rule",
+        "body": "Rose only for what may not be written, mint only for what traces and ships, amber only for partial and QUALIFY FIRST. No state colour ever decorates.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Indigo Rule",
+        "body": "Indigo is structure and action, never a background wash for content.",
+        "section": "colors"
+      },
+      {
+        "name": "The Evidence Is Mono Rule",
+        "body": "Mono is for code, file names, fact ids, commands and verdicts. Claims, headings and explanations stay in the grotesk.",
+        "section": "typography"
+      },
+      {
+        "name": "The Only The Reviewer Floats Rule",
+        "body": "A review comment is the one surface that lifts off the sheet.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do trace every visible claim in a demo to a file in the example and label invented material as invented.",
+      "Do keep state colours to their law: rose (#99152f) removed and FIX, mint (#12633a) added and SHIP, amber (#734700) partial.",
+      "Do draw icons as SVG with a 1.5px stroke.",
+      "Do keep the strike-through draw as the only entrance motion, and switch it off under reduced motion."
+    ],
+    "donts": [
+      "Don't use em or en dashes anywhere in copy.",
+      "Don't set prose, headings or explanations in mono.",
+      "Don't add shadows to anything but review comments.",
+      "Don't use counts, stars, testimonials or prices as proof."
+    ]
+  }
+}
