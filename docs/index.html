@@ -3,1055 +3,458 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
 <title>Job Apply</title>
-<meta name="description" content="Tailored job applications that are true in every line. An open-source add-on for Claude Code, Codex, Cursor and GitHub Copilot.">
-<meta property="og:title" content="Job Apply">
-<meta property="og:description" content="Tailored job applications that are true in every line.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://me2resh.github.io/job-apply/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%233b33a6'/%3E%3Crect x='7' y='10' width='18' height='3' rx='1.5' fill='%23ffb1bf'/%3E%3Crect x='7' y='19' width='18' height='3' rx='1.5' fill='%238ee3ae'/%3E%3Crect x='14.5' y='15.5' width='3' height='10' rx='1.5' fill='%238ee3ae'/%3E%3C/svg%3E">
-<link rel="preload" href="fonts/schibsted-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/martian-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="description" content="Tailored job applications that are true in every line. An add-on for Claude Code, Codex, Cursor and GitHub Copilot that writes each CV and cover letter from your own fact bank, then has a separate reviewer attack them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 <style>
-@font-face {
-  font-family: "Schibsted Grotesk";
-  src: url("fonts/schibsted-grotesk-latin.woff2") format("woff2");
-  font-weight: 400 900;
-  font-style: normal;
-  font-display: swap;
+:root{
+  --paper:#e9edf0;--raised:#f6f8fa;--ink:#14202c;--muted:#5b6977;--rule:#c9d1d8;--rule-strong:#14202c;
+  --accent:#a3382e;--accent-ink:#fff;--amber:#9a6416;--green:#2e7a4e;--grey:#6e7781;--code:#dfe4e8;
 }
-@font-face {
-  font-family: "Martian Mono";
-  src: url("fonts/martian-mono-latin.woff2") format("woff2");
-  font-weight: 100 800;
-  font-stretch: 75% 112.5%;
-  font-style: normal;
-  font-display: swap;
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0f161d;--raised:#16202a;--ink:#e6ebf0;--muted:#98a4b0;--rule:#2a3642;--rule-strong:#e6ebf0;
+  --accent:#e07a6c;--accent-ink:#0f161d;--amber:#e0a93a;--green:#6fcf8b;--grey:#9aa3ad;--code:#1b2631;
+}}
+:root[data-theme="dark"]{
+  --paper:#0f161d;--raised:#16202a;--ink:#e6ebf0;--muted:#98a4b0;--rule:#2a3642;--rule-strong:#e6ebf0;
+  --accent:#e07a6c;--accent-ink:#0f161d;--amber:#e0a93a;--green:#6fcf8b;--grey:#9aa3ad;--code:#1b2631;
+}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth}
+body{margin:0;overflow-x:clip;background:var(--paper);color:var(--ink);font-family:"Source Serif 4",Georgia,serif;font-size:17px;line-height:1.6}
+h1,h2,h3,.sans,table,button,.cta,nav,.tag{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif}
+.wrap{max-width:1080px;width:100%;margin:0 auto;padding:0 20px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:2px}
+::selection{background:var(--ink);color:var(--paper)}
+
+nav{display:flex;justify-content:space-between;align-items:baseline;padding:22px 0 0;font-size:15px}
+nav .brand{font-weight:700;font-size:18px;text-decoration:none;letter-spacing:-.01em}
+nav ul{list-style:none;margin:0;padding:0;display:flex;gap:18px}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--ink)}
+
+header{padding:64px 0 48px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:40px;align-items:start}
+h1{text-wrap:balance;font-size:clamp(40px,8.5vw,84px);overflow-wrap:anywhere;line-height:.95;letter-spacing:-.035em;margin:0 0 20px;font-weight:700;font-variation-settings:"opsz" 96}
+.tag{font-size:19px;line-height:1.4;color:var(--muted);margin:0 0 26px;max-width:32ch}
+.cta a{display:inline-block;padding:12px 18px;border-radius:4px;text-decoration:none;font-weight:600;font-size:16px;margin:0 10px 10px 0;border:1.5px solid var(--rule-strong)}
+.cta a.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cta a.primary:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.cta a.quiet:hover{background:var(--raised)}
+
+/* the ledger: the page's one visual event */
+.ledger{border-top:2px solid var(--rule-strong);font-size:15px;line-height:1.4}
+.ledger .head{display:grid;grid-template-columns:1fr 1fr 44px;gap:14px;padding:10px 0 8px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--rule)}
+.ledger .row{display:grid;grid-template-columns:1fr 1fr 44px;gap:14px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:start}
+.ledger .said{font-family:"Source Serif 4",Georgia,serif;font-style:italic;font-size:16px}
+.ledger .did{font-size:15px}
+.ledger .when{display:block;color:var(--muted);font-size:13px;margin-top:2px;font-style:normal;font-family:"Bricolage Grotesque",sans-serif}
+.mark{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;font-weight:700;font-size:15px;font-family:"Bricolage Grotesque",sans-serif;border:1.5px solid currentColor;justify-self:end}
+.mark.ok{color:var(--green)}.mark.inf{color:var(--amber)}.mark.unk{color:var(--grey)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ledger .cap{padding:10px 0 0;color:var(--muted);font-size:14px;font-family:"Bricolage Grotesque",sans-serif}
+.ledger .cap b{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion:no-preference){
+  .ledger .row .mark{opacity:0;transform:scale(1.6);animation:stamp .45s cubic-bezier(.2,.9,.3,1.2) forwards}
+  .ledger .row:nth-child(3) .mark{animation-delay:.5s}.ledger .row:nth-child(4) .mark{animation-delay:1s}.ledger .row:nth-child(5) .mark{animation-delay:1.5s}
+  @keyframes stamp{to{opacity:1;transform:scale(1)}}
 }
 
-:root {
-  --paper: #f2f1f7;
-  --sheet: #fcfcff;
-  --ink: #1c1a35;
-  --ink-2: #4b4868;
-  --rule: #d8d6e6;
-  --rule-strong: #b9b6cf;
-  --indigo: #3b33a6;
-  --indigo-ink: #3b33a6;
-  --on-indigo: #ffffff;
-  --on-indigo-2: #d6d3f7;
-  --rail-hover: #4a42b8;
-  --rose-bg: #fbe4e8;
-  --rose-ink: #99152f;
-  --rose-rule: #efb3bf;
-  --mint-bg: #dcf2e4;
-  --mint-ink: #12633a;
-  --mint-rule: #9fd6b3;
-  --amber-bg: #fbeecb;
-  --amber-ink: #734700;
-  --amber-rule: #e8c77a;
-  --lit: #e6e3fb;
-  --shadow: 0 10px 28px -12px rgba(28, 26, 53, 0.28), 0 2px 6px -2px rgba(28, 26, 53, 0.12);
-  --sans: "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "Martian Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --row: 28px;
-  --rail-w: 232px;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #14131d;
-    --sheet: #1b1a28;
-    --ink: #ebe9f7;
-    --ink-2: #b4b1cd;
-    --rule: #312f47;
-    --rule-strong: #4a4766;
-    --indigo: #2b2575;
-    --indigo-ink: #bcb6ff;
-    --on-indigo: #ffffff;
-    --on-indigo-2: #cdc9f5;
-    --rail-hover: #3a3394;
-    --rose-bg: #3b1620;
-    --rose-ink: #ffb3c0;
-    --rose-rule: #6b2a3a;
-    --mint-bg: #10301f;
-    --mint-ink: #91e4b0;
-    --mint-rule: #2a5e40;
-    --amber-bg: #33270b;
-    --amber-ink: #f3c96d;
-    --amber-rule: #66501d;
-    --lit: #2c2856;
-    --shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.7), 0 2px 6px -2px rgba(0, 0, 0, 0.5);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --paper: #14131d;
-  --sheet: #1b1a28;
-  --ink: #ebe9f7;
-  --ink-2: #b4b1cd;
-  --rule: #312f47;
-  --rule-strong: #4a4766;
-  --indigo: #2b2575;
-  --indigo-ink: #bcb6ff;
-  --on-indigo: #ffffff;
-  --on-indigo-2: #cdc9f5;
-  --rail-hover: #3a3394;
-  --rose-bg: #3b1620;
-  --rose-ink: #ffb3c0;
-  --rose-rule: #6b2a3a;
-  --mint-bg: #10301f;
-  --mint-ink: #91e4b0;
-  --mint-rule: #2a5e40;
-  --amber-bg: #33270b;
-  --amber-ink: #f3c96d;
-  --amber-rule: #66501d;
-  --lit: #2c2856;
-  --shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.7), 0 2px 6px -2px rgba(0, 0, 0, 0.5);
-  color-scheme: dark;
-}
+section{padding:48px 0;border-top:1px solid var(--rule)}
+h2{font-size:30px;letter-spacing:-.02em;margin:0 0 8px;font-weight:600;line-height:1.1}
+.lead{margin:0 0 24px;max-width:62ch;color:var(--muted);font-size:17px}
+p{max-width:66ch}
 
-*, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 24px; scrollbar-color: var(--rule-strong) var(--paper); }
-body {
-  margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-}
-::selection { background: var(--indigo); color: var(--on-indigo); }
-a { color: var(--indigo-ink); text-decoration-thickness: 1px; text-underline-offset: 0.22em; }
-a:hover { text-decoration-thickness: 2px; }
-:focus-visible { outline: 2px solid var(--indigo-ink); outline-offset: 3px; border-radius: 3px; }
-code, kbd, .mono { font-family: var(--mono); font-stretch: 87.5%; font-size: 0.86em; }
-h1, h2, h3 { text-wrap: balance; margin: 0; }
-p { margin: 0; text-wrap: pretty; }
-.vh { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-.skiplink { position: absolute; left: 12px; top: -60px; background: var(--ink); color: var(--paper); padding: 8px 14px; border-radius: 6px; z-index: 10; text-decoration: none; }
-.skiplink:focus { top: 12px; }
+/* the six steps as a ruled list */
+.lanes{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.lanes li{display:grid;grid-template-columns:200px 1fr 1fr;gap:20px;padding:14px 0;border-bottom:1px solid var(--rule);font-size:15.5px}
+.lanes li b{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:16px}
+.lanes li span{color:var(--muted)}
+.lanes li em{font-style:normal}
 
-/* Rail: the one governing line every section hangs off */
-.rail {
-  background: var(--indigo);
-  color: var(--on-indigo);
-}
-.rail a { color: var(--on-indigo); text-decoration: none; }
-.rail a:focus-visible, .rail button:focus-visible { outline-color: var(--on-indigo); }
-.mark { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.125rem; letter-spacing: -0.01em; }
-.mark svg { flex: none; }
-.mark small { font-family: var(--mono); font-stretch: 87.5%; font-weight: 400; font-size: 0.6875rem; color: var(--on-indigo-2); letter-spacing: 0; }
-.rail nav ol { list-style: none; margin: 0; padding: 0; }
-.rail nav a {
-  display: flex; gap: 12px; align-items: baseline;
-  padding: 7px 12px; border-radius: 6px;
-  font-size: 0.9375rem;
-  color: var(--on-indigo-2);
-}
-.rail nav a:hover { background: var(--rail-hover); color: var(--on-indigo); }
-.rail nav a[aria-current="true"] { color: var(--on-indigo); background: var(--rail-hover); font-weight: 700; }
-.rail-foot { font-size: 0.8125rem; color: var(--on-indigo-2); }
-.rail-foot a { text-decoration: underline; text-underline-offset: 0.2em; }
+/* uses */
+.uses{display:grid;grid-template-columns:repeat(2,1fr);gap:0 40px;border-top:1px solid var(--rule)}
+.uses div{padding:18px 0;border-bottom:1px solid var(--rule)}
+.uses h3{margin:0 0 4px;font-size:20px;font-weight:600}
+.uses p{margin:0;font-size:16px}
+.uses p.q{font-style:italic;color:var(--ink)}
+.uses p.o{color:var(--muted);font-size:15px;margin-top:6px}
 
-@media (min-width: 960px) {
-  .rail {
-    position: fixed; inset: 0 auto 0 0; width: var(--rail-w);
-    display: flex; flex-direction: column; gap: 36px;
-    padding: 28px 16px 24px;
-    overflow-y: auto;
-  }
-  .rail .mark { padding: 0 12px; }
-  .rail nav a { margin-bottom: 2px; }
-  .rail-foot { margin-top: auto; padding: 0 12px; display: grid; gap: 6px; }
-  main, .foot { margin-left: var(--rail-w); }
-}
-@media (max-width: 959.98px) {
-  .rail { padding: 14px 16px 10px; }
-  .rail-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-  .rail nav ol { display: flex; flex-wrap: wrap; gap: 2px 4px; margin: 10px -8px 0; }
-  .rail nav a { padding: 6px 8px; font-size: 0.875rem; }
-  .rail-foot { display: none; }
-}
-.rail-top .gh { display: none; font-size: 0.875rem; text-decoration: underline; text-underline-offset: 0.2em; }
-@media (max-width: 959.98px) { .rail-top .gh { display: inline; } }
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--rule);margin:0 0 18px}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;color:var(--muted);padding:10px 14px 10px 0;margin-right:18px;cursor:pointer;font-size:15px;font-weight:500}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.view[hidden]{display:none}
+table{width:100%;border-collapse:collapse;font-size:14.5px;line-height:1.4}
+th,td{text-align:left;vertical-align:top;padding:9px 12px 9px 0;border-bottom:1px solid var(--rule)}
+th{color:var(--muted);font-weight:500}
+thead th{border-bottom:1px solid var(--rule-strong)}
+.m{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:13px;white-space:nowrap}
+.m.ok{color:var(--green)}.m.inf{color:var(--amber)}.m.unk{color:var(--grey)}.m.fix{color:var(--accent)}
+.note{font-size:14px;color:var(--muted);font-family:"Bricolage Grotesque",sans-serif}
 
-/* Page column */
-.col { max-width: 1120px; margin: 0 auto; padding: 0 56px; }
-@media (max-width: 720px) { .col { padding: 0 16px; } }
-section { padding: 112px 0 0; }
-.sec-head { display: grid; gap: 16px; margin-bottom: 44px; max-width: 46rem; }
-h2 { font-size: clamp(2rem, 1.3rem + 2.4vw, 3.25rem); line-height: 1.04; letter-spacing: -0.03em; font-weight: 800; }
-h3 { font-size: 1.25rem; line-height: 1.25; letter-spacing: -0.01em; font-weight: 750; }
-.lede { font-size: 1.1875rem; color: var(--ink-2); max-width: 40rem; }
-.prose { max-width: 65ch; display: grid; gap: 16px; }
+/* paper sheets: always light, like a page on a desk */
+.sheet{--p-ink:#14202c;--p-muted:#5b6977;--p-rule:#d7dde3;--p-rule-strong:#14202c;--p-green:#2e7a4e;--p-amber:#9a6416;--p-grey:#6e7781;--p-red:#a3382e;
+  background:#fff;color:var(--p-ink);max-width:860px;padding:44px 52px 36px;border-radius:2px;box-shadow:0 1px 0 rgba(0,0,0,.06),0 12px 32px rgba(0,0,0,.18);font-family:"Source Serif 4",Georgia,serif;font-size:15.5px;line-height:1.55}
+.sheet .dochead{display:flex;justify-content:space-between;gap:20px;align-items:baseline;border-bottom:2px solid var(--p-rule-strong);padding-bottom:10px;margin-bottom:6px;font-family:"Bricolage Grotesque",sans-serif}
+.sheet .dochead b{font-size:19px;font-weight:600;letter-spacing:-.01em}
+.sheet .dochead span{color:var(--p-muted);font-size:13.5px;white-space:nowrap}
+.sheet .legend{color:var(--p-muted);font-size:13px;font-family:"Bricolage Grotesque",sans-serif;margin:0 0 6px}
+.sheet h3{margin:22px 0 8px;font-size:16.5px;font-weight:600;color:var(--p-ink)}
+.sheet p{margin:0 0 8px;max-width:none}
+.sheet table{font-size:13.5px}
+.sheet th,.sheet td{border-bottom:1px solid var(--p-rule);padding:7px 10px 7px 0}
+.sheet th{color:var(--p-muted)}
+.sheet thead th{border-bottom:1px solid var(--p-rule-strong)}
+.sheet .m.ok{color:var(--p-green)}.sheet .m.inf{color:var(--p-amber)}.sheet .m.unk{color:var(--p-grey)}.sheet .m.fix{color:var(--p-red)}
+.sheet .note{color:var(--p-muted)}
+.sheet a{color:#0f4c75}
+.sheet .docfoot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 20px;border-top:1px solid var(--p-rule);margin-top:26px;padding-top:10px;color:var(--p-muted);font-size:12.5px;font-family:"Bricolage Grotesque",sans-serif}
+.sheet .docfoot a{color:var(--p-ink)}
+.sheet ::selection{background:#14202c;color:#fff}
+.sheet :focus-visible{outline-color:#a3382e}
 
-/* Hero */
-.hero { padding: 56px 0 0; }
-.hero h1 {
-  font-size: clamp(2.6rem, 1.2rem + 3.9vw, 4.75rem);
-  line-height: 0.98;
-  letter-spacing: -0.04em;
-  font-weight: 850;
-  max-width: 11.5em;
-}
-.hero .lede { margin-top: 20px; max-width: 44rem; color: var(--ink); }
-.act { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
-.act .alt { font-size: 0.9375rem; }
+/* a reviewer finding: draft, why, shipped */
+.finding{border-top:1px solid var(--p-rule);padding:12px 0 6px}
+.finding h3{margin:0 0 8px;font-size:15px}
+.finding .r{display:grid;grid-template-columns:76px minmax(0,1fr);gap:4px 14px;margin:0 0 6px}
+.finding .r > span{font-family:"Bricolage Grotesque",sans-serif;font-size:12.5px;color:var(--p-muted);padding-top:2px}
+.finding del{color:var(--p-red);text-decoration-thickness:1.5px}
+.finding ins{text-decoration:none;color:var(--p-green);font-weight:600}
+.finding .why{color:var(--p-ink)}
+.lede-finding{border-top:0;padding-top:4px}
+.lede-finding .r{grid-template-columns:76px minmax(0,1fr)}
+.lede-finding del,.lede-finding ins{font-size:19px;line-height:1.4}
+.lede-finding .comment{border-left:2px solid var(--p-red);padding:2px 0 2px 14px;margin:2px 0 4px}
+.lede-finding .comment b{font-family:"Bricolage Grotesque",sans-serif;color:var(--p-red);font-size:13px;letter-spacing:.02em}
 
-/* Command box: the primary action */
-.cmd {
-  display: flex; align-items: stretch;
-  border: 1px solid var(--rule-strong);
-  background: var(--sheet);
-  border-radius: 8px;
-  max-width: 100%;
-  min-width: 0;
-}
-.cmd code {
-  display: block; padding: 13px 16px; font-size: 0.875rem; line-height: 1.5;
-  overflow-wrap: anywhere; white-space: pre-wrap; min-width: 0; flex: 1;
-}
-.cmd code::before { content: "$ "; color: var(--ink-2); }
-.cmd code.noprompt::before { content: none; }
-.copy {
-  flex: none;
-  display: inline-flex; align-items: center; gap: 8px;
-  border: 0; border-left: 1px solid var(--rule-strong);
-  background: var(--indigo); color: var(--on-indigo);
-  font: 700 0.875rem/1 var(--sans);
-  padding: 0 16px;
-  border-radius: 0 7px 7px 0;
-  cursor: pointer;
-  min-height: 44px;
-}
-:root[data-theme="dark"] .copy { background: #4a42b8; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .copy { background: #4a42b8; } }
-.copy:hover { background: var(--rail-hover); }
-.copy:focus-visible { outline: 2px solid var(--indigo-ink); outline-offset: 2px; }
-.copy svg { width: 16px; height: 16px; }
-.copy[data-done] .i-copy { display: none; }
-.copy:not([data-done]) .i-done { display: none; }
+/* install */
+.install{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.cmd{position:relative;margin:0 0 12px}
+pre{background:var(--code);border-radius:6px;padding:14px 84px 14px 16px;font-size:13.5px;line-height:1.5;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.copy{position:absolute;top:8px;right:8px;font-family:"Bricolage Grotesque",sans-serif;font-size:13px;font-weight:600;background:var(--paper);color:var(--ink);border:1.5px solid var(--rule-strong);border-radius:4px;padding:5px 10px;cursor:pointer;min-height:32px}
+.copy:hover{background:var(--ink);color:var(--paper)}
+.ask{list-style:none;padding:0;margin:0;border-top:1px solid var(--rule)}
+.ask li{padding:10px 0;border-bottom:1px solid var(--rule);font-style:italic}
+.qs{list-style:none;padding:0;margin:0;border-top:1px solid var(--rule);max-width:66ch}
+.qs li{padding:10px 0;border-bottom:1px solid var(--rule)}
 
-/* Diff hunk: the world's main surface */
-.hunk {
-  border: 1px solid var(--rule-strong);
-  border-radius: 6px;
-  background: var(--sheet);
-  overflow: hidden;
-  font-family: var(--mono);
-  font-stretch: 87.5%;
-  font-size: 0.8125rem;
-  line-height: 1.6;
-}
-.hunk-head {
-  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--rule);
-  color: var(--ink-2);
-  font-size: 0.75rem;
-}
-.hunk-head b { color: var(--ink); font-weight: 600; }
-.line {
-  display: grid;
-  grid-template-columns: 3.5ch 2ch minmax(0, 1fr) 15rem;
-  align-items: start;
-  min-height: var(--row);
-  padding-left: 8px;
-}
-.line > * { padding: 6px 0; }
-.line .ln { text-align: right; color: var(--ink-2); padding-right: 0.5ch; user-select: none; }
-.line .sg { text-align: center; user-select: none; font-weight: 700; }
-.line .tx { padding-right: 16px; white-space: pre-wrap; overflow-wrap: anywhere; }
-.line .bl { border-left: 1px solid var(--rule); padding-left: 12px; padding-right: 12px; color: var(--ink-2); font-size: 0.6875rem; line-height: 1.55; padding-top: 8px; }
-.line.del { background: var(--rose-bg); color: var(--rose-ink); }
-.line.del .ln { color: var(--rose-ink); }
-.line.del .bl { border-color: var(--rose-rule); }
-.line.add { background: var(--mint-bg); color: var(--mint-ink); }
-.line.add .ln { color: var(--mint-ink); }
-.line.add .bl { border-color: var(--mint-rule); }
-.line.del .bl, .line.add .bl { color: var(--indigo-ink); }
-.line.ctx { color: var(--ink); }
-.strike {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-repeat: no-repeat;
-  background-position: 0 56%;
-  background-size: 100% 1.5px;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
-@media (max-width: 720px) {
-  .hunk { font-size: 0.75rem; }
-  .line { grid-template-columns: 3ch 2ch minmax(0, 1fr); }
-  .line .bl { grid-column: 3; grid-row: 2; border-left: 0; padding: 0 12px 8px 0; font-size: 0.75rem; }
-  .line .ln { grid-row: 1 / span 2; }
-  .line .sg { grid-row: 1 / span 2; }
-  .line .tx { grid-column: 3; grid-row: 1; }
-}
+/* rules */
+.rules{columns:2;column-gap:40px;margin:0;padding:0;list-style:none}
+.rules li{break-inside:avoid;padding:0 0 16px}
+.rules b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:17px;margin-bottom:2px}
+.rules span{color:var(--muted);font-size:15.5px}
+.order{font-family:"Bricolage Grotesque",sans-serif;font-size:15px;margin:0 0 24px;color:var(--muted)}
+.order b{color:var(--ink);font-weight:600}
 
-/* Review comment anchored to a line */
-.thread { padding: 4px 16px 18px calc(5.5ch + 16px); position: relative; background: var(--sheet); }
-.thread::before { content: ""; position: absolute; left: calc(4.5ch + 9px); top: 0; height: 26px; width: 1px; background: var(--rule-strong); }
-.comment {
-  font-family: var(--sans);
-  font-stretch: 100%;
-  font-size: 0.9375rem;
-  line-height: 1.55;
-  background: var(--sheet);
-  border: 1px solid var(--rule-strong);
-  border-radius: 8px;
-  box-shadow: var(--shadow);
-  max-width: 46rem;
-  margin-top: 14px;
-}
-.comment header {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
-  padding: 10px 14px; border-bottom: 1px solid var(--rule);
-  font-size: 0.8125rem; color: var(--ink-2);
-}
-.comment header b { color: var(--ink); }
-.comment .body { padding: 12px 14px 14px; display: grid; gap: 8px; }
-.comment .body p { max-width: 65ch; }
-@media (max-width: 720px) { .thread { padding: 4px 12px 16px 12px; } .thread::before { left: 24px; } }
+footer{padding:36px 0 56px;color:var(--muted);font-size:14px;border-top:1px solid var(--rule);font-family:"Bricolage Grotesque",sans-serif;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+footer p{margin:0}
 
-/* Verdict tokens: colour is law */
-.tok {
-  display: inline-flex; align-items: center;
-  font-family: var(--mono); font-stretch: 87.5%; font-weight: 700;
-  font-size: 0.6875rem; letter-spacing: 0.04em;
-  padding: 3px 7px; border-radius: 4px; line-height: 1.3;
-  border: 1px solid transparent; white-space: nowrap;
+@media (max-width:860px){
+  header{grid-template-columns:1fr;gap:28px;padding:40px 0 36px}
+  .lanes li{grid-template-columns:1fr;gap:4px;padding:12px 0}
+  .uses,.install{grid-template-columns:1fr;gap:0}
+  .rules{columns:1}
+  nav ul{display:none}
+  .sheet{padding:26px 20px 22px}.sheet .dochead{flex-direction:column;gap:2px}.sheet .dochead span{white-space:normal}
+  .finding .r,.lede-finding .r{grid-template-columns:1fr;gap:0}
+  .lede-finding del,.lede-finding ins{font-size:17px}
 }
-.tok.fix, .tok.skip, .tok.gap { background: var(--rose-bg); color: var(--rose-ink); border-color: var(--rose-rule); }
-.tok.ship, .tok.apply, .tok.strong { background: var(--mint-bg); color: var(--mint-ink); border-color: var(--mint-rule); }
-.tok.partial, .tok.qualify { background: var(--amber-bg); color: var(--amber-ink); border-color: var(--amber-rule); }
-.tok.plain { background: transparent; color: var(--ink-2); border-color: var(--rule-strong); }
-
-.hero .hunk { margin-top: 40px; }
-.hero .note { margin-top: 12px; font-size: 0.8125rem; color: var(--ink-2); }
-
-/* What it is */
-.two { display: grid; gap: 40px; grid-template-columns: minmax(0, 1fr); }
-@media (min-width: 1100px) { .two { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; } }
-.file { border: 1px solid var(--rule-strong); border-radius: 6px; background: var(--sheet); overflow: hidden; }
-.file .hunk-head { font-family: var(--mono); font-stretch: 87.5%; }
-.file pre {
-  margin: 0; padding: 14px 16px 16px;
-  font-family: var(--mono); font-stretch: 87.5%; font-size: 0.75rem; line-height: 1.75;
-  white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ink);
-}
-.file pre .k, .kv .k { color: var(--indigo-ink); font-weight: 600; }
-.kv { padding: 14px 16px 16px; font-family: var(--mono); font-stretch: 87.5%; font-size: 0.75rem; line-height: 1.7; }
-.kv .k { margin-bottom: 6px; }
-.kv dl { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 3px 16px; }
-.kv dt { color: var(--ink-2); }
-.kv dd { margin: 0; }
-.kv.tree dt { color: var(--ink); }
-.kv.tree dd { color: var(--ink-2); }
-@media (max-width: 520px) { .kv.tree dl { grid-template-columns: minmax(0, 1fr); gap: 0; } .kv.tree dd { margin-bottom: 8px; } }
-.file pre .c { color: var(--ink-2); }
-.file + .file { margin-top: 16px; }
-.cmds { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); border-top: 1px solid var(--rule); }
-.cmds dt, .cmds dd { padding: 10px 0; border-bottom: 1px solid var(--rule); margin: 0; }
-.cmds dt { padding-right: 20px; }
-.cmds dt code { font-size: 0.8125rem; color: var(--indigo-ink); font-weight: 600; }
-.cmds dd { color: var(--ink-2); font-size: 0.9375rem; }
-
-/* Flow: one full-width row per step, showing the artifact after it */
-.flow { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule-strong); counter-reset: step; }
-.step {
-  display: grid; gap: 16px 40px;
-  grid-template-columns: 3.5rem minmax(0, 0.9fr) minmax(0, 1.25fr);
-  padding: 32px 0;
-  border-bottom: 1px solid var(--rule);
-}
-.step .n {
-  font-family: var(--mono); font-stretch: 87.5%; font-weight: 700;
-  font-size: 0.8125rem; color: var(--on-indigo); background: var(--indigo);
-  width: 2.25rem; height: 2.25rem; border-radius: 50%;
-  display: grid; place-items: center;
-}
-:root[data-theme="dark"] .step .n { background: #4a42b8; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .step .n { background: #4a42b8; } }
-.step h3 { margin-bottom: 8px; }
-.step p { color: var(--ink-2); max-width: 52ch; }
-@media (max-width: 900px) {
-  .step { grid-template-columns: 2.75rem minmax(0, 1fr); }
-  .step .out { grid-column: 1 / -1; }
-}
-@media (min-width: 901px) { .step .out { padding-top: 4px; } }
-.mini { border: 1px solid var(--rule-strong); border-radius: 6px; background: var(--sheet); overflow: hidden; font-size: 0.875rem; }
-.mini .hunk-head { font-family: var(--mono); font-stretch: 87.5%; }
-.mini-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; padding: 10px 16px; border-bottom: 1px solid var(--rule); align-items: start; }
-.mini-row:last-child { border-bottom: 0; }
-.mini-row .what { min-width: 0; }
-.mini-row .what b { display: block; font-weight: 650; }
-.mini-row .what span { color: var(--ink-2); font-size: 0.8125rem; display: block; }
-.mini pre { margin: 0; padding: 12px 16px; font-family: var(--mono); font-stretch: 87.5%; font-size: 0.75rem; line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; }
-.pass { color: var(--mint-ink); font-weight: 700; }
-.failw { color: var(--rose-ink); font-weight: 700; }
-
-/* Rules */
-.chain { list-style: none; margin: 0 0 48px; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 8px; counter-reset: rank; }
-.chain li { display: inline-flex; align-items: center; gap: 8px; }
-.chain .r {
-  display: inline-flex; align-items: baseline; gap: 10px;
-  border: 1px solid var(--rule-strong); border-radius: 999px; background: var(--sheet);
-  padding: 8px 16px; font-weight: 700; font-size: 1rem;
-}
-.chain li:first-child .r { background: var(--indigo); color: var(--on-indigo); border-color: var(--indigo); }
-:root[data-theme="dark"] .chain li:first-child .r { background: #4a42b8; border-color: #4a42b8; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .chain li:first-child .r { background: #4a42b8; border-color: #4a42b8; } }
-.chain .r i { font-style: normal; font-family: var(--mono); font-stretch: 87.5%; font-size: 0.6875rem; opacity: 0.85; }
-.chain svg { width: 16px; height: 16px; color: var(--ink-2); flex: none; }
-.rules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); border-top: 1px solid var(--rule-strong); }
-@media (min-width: 900px) { .rules { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 56px; } }
-.rules li { padding: 18px 0; border-bottom: 1px solid var(--rule); display: grid; gap: 4px; }
-.rules li b { font-weight: 700; }
-.rules li span { color: var(--ink-2); font-size: 0.9375rem; }
-
-/* The review */
-.verdict {
-  display: flex; flex-wrap: wrap; align-items: end; gap: 16px 40px;
-  margin-bottom: 40px;
-}
-.big {
-  font-family: var(--mono); font-weight: 800; font-stretch: 112.5%;
-  font-size: clamp(5rem, 2rem + 11vw, 9.5rem); line-height: 0.8; letter-spacing: -0.04em;
-  color: var(--rose-ink);
-  background: var(--rose-bg);
-  border: 1px solid var(--rose-rule);
-  border-radius: 10px;
-  padding: 0.12em 0.16em 0.1em;
-}
-.verdict .prose { flex: 1 1 22rem; }
-.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--rule-strong); margin-bottom: 0; }
-.tabs [role="tab"] {
-  font: 650 0.9375rem/1.2 var(--sans);
-  color: var(--ink-2);
-  background: transparent; border: 0;
-  padding: 12px 14px 11px;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -1px;
-  cursor: pointer;
-  display: inline-flex; gap: 8px; align-items: center;
-  min-height: 44px;
-}
-.tabs [role="tab"]:hover { color: var(--ink); }
-.tabs [role="tab"][aria-selected="true"] { color: var(--ink); border-bottom-color: var(--indigo-ink); }
-.panel { padding-top: 28px; }
-@media (max-width: 600px) {
-  .tabs { border-bottom: 0; gap: 6px; }
-  .tabs [role="tab"] { border: 1px solid var(--rule-strong); border-radius: 6px; margin: 0; padding: 8px 12px; background: var(--sheet); }
-  .tabs [role="tab"][aria-selected="true"] { border-color: var(--indigo-ink); box-shadow: inset 0 0 0 1px var(--indigo-ink); }
-  .tabs .wide { display: none; }
-}
-.panel[hidden] { display: none !important; }
-.panel .read { font-size: 0.9375rem; color: var(--ink-2); max-width: 72ch; margin-bottom: 24px; }
-.panel .read b { color: var(--ink); }
-.findings { list-style: none; margin: 0; padding: 0; display: grid; gap: 20px; }
-.finding .hunk { font-size: 0.8125rem; }
-.finding .line { grid-template-columns: 3.5ch 2ch minmax(0, 1fr); }
-@media (max-width: 720px) { .finding .line .tx { grid-row: 1; } .finding .line .sg, .finding .line .ln { grid-row: 1; } }
-.finding .why { font-family: var(--sans); font-stretch: 100%; padding: 12px 16px 14px calc(5.5ch); font-size: 0.9375rem; line-height: 1.55; border-top: 1px solid var(--rule); }
-.finding .why p { max-width: 68ch; }
-.finding .why p + p { margin-top: 8px; }
-.finding .why .lab { font-family: var(--mono); font-stretch: 87.5%; font-size: 0.6875rem; font-weight: 700; color: var(--ink-2); letter-spacing: 0.04em; margin-right: 6px; }
-@media (max-width: 720px) { .finding .why { padding-left: 16px; } }
-.applied { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; color: var(--mint-ink); font-weight: 650; font-size: 0.875rem; }
-.applied svg { width: 16px; height: 16px; }
-.challenge { margin-top: 48px; display: grid; gap: 16px; }
-.challenge ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule-strong); max-width: 60rem; }
-.challenge li { padding: 12px 0; border-bottom: 1px solid var(--rule); }
-
-/* Sample: facts light the lines that cite them */
-.trace { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr); align-items: start; }
-@media (min-width: 1100px) { .trace { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 32px; } }
-.trace .line { padding-left: 0; grid-template-columns: minmax(0, 1fr) 6.5rem; transition: background-color 220ms cubic-bezier(0.16, 1, 0.3, 1); }
-.trace .line .tx { padding: 12px 16px; font-family: var(--sans); font-stretch: 100%; font-size: 0.9375rem; line-height: 1.5; color: var(--ink); white-space: normal; }
-.trace .line .bl { padding: 10px 12px; display: flex; }
-.trace .line + .line { border-top: 1px solid var(--rule); }
-.fid {
-  font: 700 0.75rem/1 var(--mono); font-stretch: 87.5%;
-  color: var(--indigo-ink); background: transparent;
-  border: 1px solid var(--rule-strong); border-radius: 4px;
-  padding: 7px 8px; cursor: pointer; min-height: 32px;
-  transition: background-color 220ms cubic-bezier(0.16, 1, 0.3, 1), color 220ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.fid:hover, .fid[aria-pressed="true"] { background: var(--indigo); color: var(--on-indigo); border-color: var(--indigo); }
-:root[data-theme="dark"] .fid:hover, :root[data-theme="dark"] .fid[aria-pressed="true"] { background: #4a42b8; border-color: #4a42b8; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fid:hover, :root:not([data-theme="light"]) .fid[aria-pressed="true"] { background: #4a42b8; border-color: #4a42b8; } }
-.facts { list-style: none; margin: 0; padding: 0; }
-.fact { padding: 12px 16px; border-bottom: 1px solid var(--rule); font-family: var(--mono); font-stretch: 87.5%; font-size: 0.75rem; line-height: 1.7; transition: background-color 220ms cubic-bezier(0.16, 1, 0.3, 1); }
-.fact:last-child { border-bottom: 0; }
-.fact b { color: var(--indigo-ink); }
-.fact .c { color: var(--ink-2); }
-.is-lit { background: var(--lit) !important; }
-@media (max-width: 720px) {
-  .trace .line { grid-template-columns: minmax(0, 1fr) 5.25rem; padding-left: 0; }
-  .trace .line .tx { grid-column: 1; grid-row: 1; padding: 12px 12px 12px 14px; }
-  .trace .line .bl { grid-column: 2; grid-row: 1; padding: 10px 10px 10px 0; border-left: 0; }
-}
-.trace-hint { font-size: 0.875rem; color: var(--ink-2); margin-top: 12px; }
-.pdfs { margin-top: 48px; display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
-@media (min-width: 800px) { .pdfs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.pdf {
-  display: grid; gap: 6px; align-content: start;
-  padding: 18px 20px; border-radius: 8px;
-  border: 1px solid var(--rule-strong); background: var(--sheet);
-  text-decoration: none; color: var(--ink);
-  transition: border-color 160ms ease-out, transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.pdf:hover { border-color: var(--indigo-ink); transform: translateY(-2px); }
-.pdf b { font-size: 1.0625rem; color: var(--indigo-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.22em; }
-.pdf span { font-size: 0.875rem; color: var(--ink-2); }
-.pdf code { font-size: 0.6875rem; color: var(--ink-2); overflow-wrap: anywhere; }
-.invented { margin-top: 20px; font-size: 0.875rem; color: var(--ink-2); max-width: 65ch; }
-
-/* Install */
-.inst .tabs { margin-top: 0; }
-.inst .panel { display: grid; gap: 16px; max-width: 52rem; }
-.inst .panel p { color: var(--ink-2); max-width: 65ch; }
-.needs { margin-top: 40px; display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); border-top: 1px solid var(--rule-strong); padding-top: 24px; }
-@media (min-width: 900px) { .needs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; } }
-.needs h3 { font-size: 1rem; margin-bottom: 6px; }
-.needs p { font-size: 0.9375rem; color: var(--ink-2); }
-
-/* Footer */
-.foot { margin-top: 128px; border-top: 1px solid var(--rule-strong); }
-.foot .col { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; padding-top: 28px; padding-bottom: 40px; font-size: 0.9375rem; color: var(--ink-2); }
-
-/* The one authored moment: the reviewer's strike draws through the inflated line */
-@media (prefers-reduced-motion: no-preference) {
-  html.js .hero .strike { animation: draw 900ms cubic-bezier(0.16, 1, 0.3, 1) 500ms both; }
-  html.js .hero .line.add { animation: land 700ms cubic-bezier(0.16, 1, 0.3, 1) 1100ms both; }
-  html.js .hero .comment { animation: rise 700ms cubic-bezier(0.16, 1, 0.3, 1) 1350ms both; }
-}
-@keyframes draw { from { background-size: 0% 1.5px; } to { background-size: 100% 1.5px; } }
-@keyframes land { from { background-color: var(--sheet); } to { background-color: var(--mint-bg); } }
-@keyframes rise { from { transform: translateY(6px); box-shadow: 0 0 0 0 rgba(0,0,0,0); } to { transform: none; box-shadow: var(--shadow); } }
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; }
-}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-<a class="skiplink" href="#top">Skip to content</a>
+<div class="wrap">
+<nav aria-label="Page">
+  <a class="brand" href="#">Job Apply</a>
+  <ul><li><a href="#how">How it works</a></li><li><a href="#uses">Uses</a></li><li><a href="#review">The review</a></li><li><a href="#example">Example</a></li><li><a href="#install">Install</a></li><li><a href="https://github.com/me2resh/job-apply">GitHub</a></li></ul>
+</nav>
 
-<header class="rail">
-  <div class="rail-top">
-    <a class="mark" href="#top" aria-label="Job Apply, top of page">
-      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="6" fill="#ffffff" fill-opacity="0.14"/><rect x="7" y="10" width="18" height="3" rx="1.5" fill="#ffb1bf"/><rect x="7" y="19" width="18" height="3" rx="1.5" fill="#8ee3ae"/><rect x="14.5" y="15.5" width="3" height="10" rx="1.5" fill="#8ee3ae"/></svg>
-      <span>Job Apply <small>0.1.0</small></span>
-    </a>
-    <a class="gh" href="https://github.com/me2resh/job-apply">Source</a>
+<header>
+  <div>
+    <h1>Job applications, true in every line.</h1>
+    <p class="tag">An add-on for Claude Code, Codex, Cursor and GitHub Copilot. It writes each CV and cover letter from your own fact bank, then has a separate reviewer attack them before you send.</p>
+    <div class="cta"><a class="primary" href="#install">Install</a><a class="quiet" href="#example">See a finished application</a></div>
   </div>
-  <nav aria-label="Sections">
-    <ol>
-      <li><a href="#what">What it is</a></li>
-      <li><a href="#how">How it runs</a></li>
-      <li><a href="#rules">Rules</a></li>
-      <li><a href="#review">The review</a></li>
-      <li><a href="#sample">The sample</a></li>
-      <li><a href="#install">Install</a></li>
-    </ol>
-  </nav>
-  <div class="rail-foot">
-    <a href="https://github.com/me2resh/job-apply">Source on GitHub</a>
-    <span>MIT licence</span>
+  <div class="ledger" aria-label="Example of an ad mapped to a fact bank">
+    <div class="head"><span>What the ad asks</span><span>What the fact bank shows</span><span></span></div>
+    <div class="row"><div class="said">"Improving app stability and release practice, with numbers."<span class="when">Essential, Brindlecove ad</span></div><div class="did">Crash-free sessions from 97.1% to 99.6%; monthly to weekly releases, 46 in 2023.<span class="when">QM-01, QM-02</span></div><span class="mark ok" title="Strong" aria-hidden="true">✓</span><span class="vh">Mark: strong</span></div>
+    <div class="row"><div class="said">"A/B tests or experiments with product."<span class="when">Essential, Brindlecove ad</span></div><div class="did">Checkout conversion from 18% to 23% in a 6-week A/B test; she led the engineering side.<span class="when">QM-03</span></div><span class="mark ok" title="Strong" aria-hidden="true">✓</span><span class="vh">Mark: strong</span></div>
+    <div class="row"><div class="said">"Kotlin Multiplatform."<span class="when">Desirable, Brindlecove ad</span></div><div class="did">One proof of concept for shared pricing logic, not shipped.<span class="when">QM-06: "built a proof of concept", never "in production"</span></div><span class="mark inf" title="Partial" aria-hidden="true">~</span><span class="vh">Mark: partial</span></div>
+    <div class="row"><div class="said">"Managing managers."<span class="when">Desirable, Brindlecove ad</span></div><div class="did">Nothing in the bank. The documents stay silent on it.<span class="when">Gap, told to her in chat</span></div><span class="mark unk" title="Gap" aria-hidden="true">?</span><span class="vh">Mark: gap</span></div>
+    <div class="cap">Every criterion gets one of three marks. <b>✓</b> strong: a fact backs it. <b>~</b> partial: written exactly as far as the fact goes. <b>?</b> gap: told to you, never written. Invented example.</div>
   </div>
 </header>
 
-<main id="top" tabindex="-1">
-  <div class="col">
-    <section class="hero" aria-labelledby="h1">
-      <h1 id="h1">Tailored job applications that are true in every line.</h1>
-      <p class="lede">Job Apply is an open-source add-on for Claude Code, Codex, Cursor and GitHub Copilot. It keeps your career facts in one bank, writes each CV and cover letter from that bank only, and has a separate reviewer attack them before you send anything.</p>
-      <div class="act">
-        <div class="cmd">
-          <code id="cmd-hero">/plugin install job-apply --marketplace me2resh/job-apply</code>
-          <button class="copy" type="button" data-copy="cmd-hero"><svg class="i-copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><svg class="i-done" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span>Copy</span></button>
-        </div>
-        <a class="alt" href="#install">Codex, Cursor, Copilot and others</a>
-      </div>
+<section id="how">
+  <h2>Facts first, writing second</h2>
+  <p class="lead">Most tailored CVs are either generic or stretched to fit the ad. Job Apply keeps the facts apart from the writing. The first run builds your fact bank by interview: your CV, LinkedIn export and reviews, then the numbers, the baselines, your part against the team's, and the evidence. After that, each application runs the same six steps, and nothing it writes says more than the bank can back.</p>
+  <ol class="lanes">
+    <li><b>1. Fetch the ad</b><em>The page, then the hiring system's public JSON when the careers page blocks scripts, then an archived copy, then it asks you to paste it.</em><span>In the example the careers page returned 403, so it read the public JSON.</span></li>
+    <li><b>2. Gate</b><em>Your own filters: pay floor, location and office days, right to work, industries you will not work for, seniority, must-haves, and a scale check. You see APPLY, QUALIFY FIRST or SKIP before a word is written.</em><span>APPLY. Another role in her tracker was a SKIP: its core product sits in an industry she excluded.</span></li>
+    <li><b>3. Map</b><em>Each criterion in the ad against your fact ids, marked strong, partial or gap. Gaps are told to you plainly and never papered over.</em><span>Four strong, three partial, one gap.</span></li>
+    <li><b>4. Write</b><em>A CV to a fixed, ATS-safe skeleton and a 250 to 350 word letter, in your voice, using the ad's words where they are honestly true.</em><span>A two-page CV and a one-page letter.</span></li>
+    <li><b>5. Check and review</b><em>A script fails the documents on dashes, banned phrases, star counts and untraced numbers. Then a separate reviewer returns SHIP or FIX with line-level findings. Up to two rounds.</em><span>FIX on both documents in round 1, eleven findings. SHIP in round 2.</span></li>
+    <li><b>6. Render</b><em>ATS-safe PDFs with generic filenames, a folder per application, a tracker row, and a reminder to read it aloud and rewrite one sentence yourself. It never sends anything.</em><span>Isolde-Brackwater-CV.pdf and Isolde-Brackwater-Cover-Letter.pdf.</span></li>
+  </ol>
+  <p class="note" style="margin-top:16px">Everything lives in one folder you choose, as plain markdown and YAML. Nothing leaves your machine except the job ad fetches.</p>
+</section>
 
-      <figure class="hunk" style="margin-left:0;margin-right:0;margin-bottom:0" aria-labelledby="hero-cap">
-        <div class="hunk-head"><span><b>cv.md</b> &middot; Profile &middot; first draft against the fact bank</span><span>Isolde Brackwater, an invented example</span></div>
-        <div class="line del">
-          <span class="ln">17</span><span class="sg" aria-hidden="true">-</span>
-          <span class="tx"><span class="vh">Removed: </span><span class="strike">...with four years leading a team of 7 Android and iOS engineers</span></span>
-          <span class="bl">reviewer, round 1<br>finding 1: Inflation</span>
-        </div>
-        <div class="thread">
-          <article class="comment" aria-label="Reviewer comment">
-            <header><span class="tok fix">FIX</span><b>Inflation</b><span>job-apply-reviewer &middot; round 1</span></header>
-            <div class="body">
-              <p>The fact bank says 5 mobile engineers, 1 backend engineer and 1 QA engineer, and she started with 3 in Apr 2022. So this is wrong twice: the team was not 7 for four years, and it is not 7 mobile engineers.</p>
-            </div>
-          </article>
-        </div>
-        <div class="line add">
-          <span class="ln">17</span><span class="sg" aria-hidden="true">+</span>
-          <span class="tx"><span class="vh">Added: </span>Engineering manager for consumer mobile apps: four years in the role and 14 years building software. A team of 7 reports to me, including 5 Android and iOS engineers.</span>
-          <span class="bl">fact-bank.md<br>Status: 4 years 6 months, write "four years"<br>Direct reports: 7 (5 mobile, 1 backend, 1 QA)</span>
-        </div>
-        <figcaption id="hero-cap" class="vh">A line from the example CV's first draft, struck out by the reviewer, with the true line that replaced it and the facts it traces to.</figcaption>
-      </figure>
-      <p class="note">From the example's real review file. The person, the company and every number are invented.</p>
-    </section>
+<section id="uses">
+  <h2>Four things you ask it</h2>
+  <div class="uses">
+    <div><h3>Set up</h3><p class="q">Set up job apply.</p><p class="o">Your fact bank, profile and voice file, built by interview. It reads your documents first and only asks what they leave out.</p></div>
+    <div><h3>Apply</h3><p class="q">Apply for this: https://...</p><p class="o">Gate verdict, criteria mapped to facts, a tailored CV and letter, reviewer verdicts, PDFs, form answers and a tracker row.</p></div>
+    <div><h3>Reply</h3><p class="q">Reply to this recruiter: ...</p><p class="o">A recruiter reply, referral ask or cold note. Short, one ask, and reviewed like everything else.</p></div>
+    <div><h3>Update</h3><p class="q">Update my CV facts.</p><p class="o">A new or corrected fact with a dated change log line, and a list of sent applications that used the old one.</p></div>
+  </div>
+</section>
 
-    <section id="what" aria-labelledby="what-h">
-      <div class="sec-head">
-        <h2 id="what-h">Facts first. Writing second.</h2>
-        <p class="lede">Most tailored CVs fail in one of two ways: they are generic, or they stretch the truth to fit the ad. Job Apply fixes both by keeping the facts apart from the writing.</p>
-      </div>
-      <div class="two">
-        <div class="prose">
-          <p>The first time you run it, it builds your fact bank by interview. It reads your CV, LinkedIn export and reviews, then asks for what they leave out: the number, the baseline, the period, your part against the team's, and the evidence. It accepts "no number" and writes that down too.</p>
-          <p>After that, give it a job ad. It checks the role against your own filters, maps each criterion in the ad to a fact, and writes a CV and cover letter in your voice. The documents can be shaped to the ad. They can never say more than the bank holds.</p>
-          <p>Everything lives in one folder you choose, as plain markdown and YAML you can read and edit. Nothing leaves your machine except the job ad fetches.</p>
-          <dl class="cmds" aria-label="Commands">
-            <dt><code>setup</code></dt><dd>Your fact bank, profile and voice file, built by interview</dd>
-            <dt><code>update</code></dt><dd>A new or corrected fact, with a dated change log line</dd>
-            <dt><code>apply</code></dt><dd>Gate, mapping, CV, letter, reviews, PDFs, form answers, tracker row</dd>
-            <dt><code>cv</code>, <code>letter</code>, <code>form</code></dt><dd>One piece of the above</dd>
-            <dt><code>message</code>, <code>cold</code></dt><dd>A recruiter reply, referral ask or cold note, short and reviewed</dd>
-            <dt><code>review</code></dt><dd>The reviewer on any text you already have</dd>
-            <dt><code>pdf</code></dt><dd>A markdown CV or letter rendered to an ATS-safe A4 PDF</dd>
-          </dl>
-        </div>
-        <div>
-          <div class="file">
-            <div class="hunk-head"><b>fact-bank.md</b><span>one achievement, as setup leaves it</span></div>
-<div class="kv">
-              <p class="k">QM-01 Crash-free sessions.</p>
-              <dl>
-                <dt>Outcome</dt><dd>crash-free sessions rose from 97.1% to 99.6%.</dd>
-                <dt>Period</dt><dd>Q3 2022 to Q2 2023.</dd>
-                <dt>Baseline</dt><dd>97.1% in Q3 2022.</dd>
-                <dt>My part</dt><dd>set the release health gate (no release below 99.3% in staged rollout) and ran the weekly crash triage.</dd>
-                <dt>Team part</dt><dd>the engineers fixed the crashes; QA built the device test matrix.</dd>
-                <dt>Evidence</dt><dd>Crashlytics export attached to the Q2 2023 performance review.</dd>
-              </dl>
-            </div>
-          </div>
-          <div class="file">
-            <div class="hunk-head"><b>fact-bank.md</b><span>a phrasing lock</span></div>
-<pre><span class="c">Time as an engineering manager: 4 years 6 months.</span>
-Write "four years", never "five" or "nearly five".</pre>
-          </div>
-          <div class="file">
-            <div class="hunk-head"><b>~/job-apply/</b><span>your folder</span></div>
-<div class="kv tree"><dl>
-              <dt>fact-bank.md</dt><dd>every usable claim, dated and sourced</dd>
-              <dt>profile.yaml</dt><dd>contact block, your filters, output settings</dd>
-              <dt>voice.md</dt><dd>writing samples, words you never use</dd>
-              <dt>applications.md</dt><dd>the tracker, one row per role</dd>
-              <dt>applications/&lt;Company&gt;-&lt;Role&gt;/</dt><dd>the ad, gate, CV, letter, review and PDFs</dd>
-            </dl></div>
-          </div>
-        </div>
-      </div>
-    </section>
+<section id="review">
+  <h2>The reviewer said FIX</h2>
+  <p class="lead">The reviewer is a separate agent. It gets the ad, the fact bank and the voice file, and nothing the writer was thinking. On the example's first drafts it caught two real inflation errors. These are its findings, lightly trimmed, and what shipped instead.</p>
 
-    <section id="how" aria-labelledby="how-h">
-      <div class="sec-head">
-        <h2 id="how-h">How an application runs</h2>
-        <p class="lede">Six steps, in this order, every time. Each one leaves a file you can read. Here is what each step left for the example.</p>
-      </div>
-      <ol class="flow">
-        <li class="step">
-          <span class="n" aria-hidden="true">1</span>
-          <div><h3>Fetch the ad</h3><p>The page first. When the careers page blocks scripts, the hiring system's public JSON, then an archived copy. If all of those fail, it asks you to paste the ad.</p></div>
-          <div class="out"><div class="mini"><div class="hunk-head"><b>jd.md</b><span>front matter</span></div>
-<pre>fetched:     2026-10-28
-fetch_route: careers page returned 403; read from the ATS public JSON</pre></div></div>
-        </li>
-        <li class="step">
-          <span class="n" aria-hidden="true">2</span>
-          <div><h3>Gate</h3><p>Your own filters, set at setup: pay floor, location and office days, right to work, industries and employers you will not work for, seniority, must-haves. Plus a scale check of their numbers against your largest true ones. You see the verdict before a word is written.</p></div>
-          <div class="out"><div class="mini"><div class="hunk-head"><b>applications.md</b><span>three roles, three verdicts</span></div>
-            <div class="mini-row"><div class="what"><b>Brindlecove, Senior Engineering Manager, Mobile</b><span>Every gate passes. Not a stretch role on scale.</span></div><span class="tok apply">APPLY</span></div>
-            <div class="mini-row"><div class="what"><b>Glintmoor Metrics, Head of Mobile</b><span>Core product is in-app ad attribution: an industry she excluded.</span></div><span class="tok skip">SKIP</span></div>
-            <div class="mini-row"><div class="what"><b>Unnamed company, via a recruiter</b><span>Company unnamed, so the industry gate cannot run. Band not stated.</span></div><span class="tok qualify">QUALIFY FIRST</span></div>
-          </div></div>
-        </li>
-        <li class="step">
-          <span class="n" aria-hidden="true">3</span>
-          <div><h3>Map</h3><p>Each criterion in the ad against your fact ids, marked strong, partial or gap. Gaps are told to you plainly. They are never papered over in the documents.</p></div>
-          <div class="out"><div class="mini"><div class="hunk-head"><b>gate-and-mapping.md</b><span>private, never sent</span></div>
-            <div class="mini-row"><div class="what"><b>Line management of a mobile team of 5 or more</b><span>7 direct reports: 5 mobile engineers, 1 backend, 1 QA</span></div><span class="tok strong">strong</span></div>
-            <div class="mini-row"><div class="what"><b>Close work with product and design</b><span>Evidence is one project; say it plainly</span></div><span class="tok partial">partial</span></div>
-            <div class="mini-row"><div class="what"><b>Kotlin Multiplatform</b><span>Say "built a proof of concept", never "experience in production"</span></div><span class="tok partial">partial</span></div>
-            <div class="mini-row"><div class="what"><b>Managing managers</b><span>None. The documents stay silent; prepare an answer.</span></div><span class="tok gap">gap</span></div>
-          </div></div>
-        </li>
-        <li class="step">
-          <span class="n" aria-hidden="true">4</span>
-          <div><h3>Write</h3><p>A CV to a fixed, ATS-safe skeleton and a 250 to 350 word letter, in your voice, using the ad's own words where they are honestly true.</p></div>
-          <div class="out"><div class="mini"><div class="hunk-head"><b>cv.md</b><span>the skeleton</span></div>
-<pre>## Profile
-## Key Achievements
-## Professional Experience
-## Earlier Career
-## Talks and Open Source
-## Education</pre></div></div>
-        </li>
-        <li class="step">
-          <span class="n" aria-hidden="true">5</span>
-          <div><h3>Check and review</h3><p>A script fails the documents on dashes, banned phrases, star counts and untraced numbers. Then a separate reviewer, a cynical talent partner, returns SHIP or FIX with line-level findings and the questions an interviewer would ask. Up to two rounds.</p></div>
-          <div class="out"><div class="mini"><div class="hunk-head"><b>review.md</b><span>the example's rounds</span></div>
-            <div class="mini-row"><div class="what"><b>Round 1, CV</b><span>6 findings, all applied</span></div><span class="tok fix">FIX</span></div>
-            <div class="mini-row"><div class="what"><b>Round 1, cover letter</b><span>5 findings, all applied</span></div><span class="tok fix">FIX</span></div>
-            <div class="mini-row"><div class="what"><b>Round 2, CV and letter</b><span>One optional polish on the CV, applied</span></div><span class="tok ship">SHIP</span></div>
-          </div></div>
-        </li>
-        <li class="step">
-          <span class="n" aria-hidden="true">6</span>
-          <div><h3>Render</h3><p>PDFs with generic filenames, one folder per application, a tracker row, and a reminder. It never sends anything. You do, after the human pass.</p></div>
-          <div class="out"><div class="mini"><div class="hunk-head"><b>applications/Brindlecove-Senior-Engineering-Manager-Mobile/</b></div>
-<pre>Isolde-Brackwater-CV.pdf
-Isolde-Brackwater-Cover-Letter.pdf
+  <div class="tabs" role="tablist" aria-label="Reviewer rounds">
+    <button role="tab" id="t-cv" aria-controls="r-cv" aria-selected="true" type="button">CV, round 1</button>
+    <button role="tab" id="t-letter" aria-controls="r-letter" aria-selected="false" tabindex="-1" type="button">Letter, round 1</button>
+    <button role="tab" id="t-r2" aria-controls="r-r2" aria-selected="false" tabindex="-1" type="button">Round 2</button>
+  </div>
 
-<span class="pass">Read it aloud once. Rewrite at least one sentence in your own words.</span></pre></div></div>
-        </li>
-      </ol>
-    </section>
-
-    <section id="rules" aria-labelledby="rules-h">
-      <div class="sec-head">
-        <h2 id="rules-h">The rules it will not break</h2>
-        <p class="lede">When two rules pull apart, the earlier one wins. The ad comes last: a criterion in the ad never licenses breaking a house rule.</p>
+  <div class="view" role="tabpanel" id="r-cv" aria-labelledby="t-cv" tabindex="0">
+    <article class="sheet">
+      <div class="dochead"><b>Isolde Brackwater, CV, reviewer round 1</b><span>Verdict: <span class="m fix">FIX</span></span></div>
+      <p class="legend">From review.md in the example. Invented person, company and numbers. All six findings were applied.</p>
+      <div class="finding lede-finding">
+        <h3>1. Inflation, on the ad's first essential criterion</h3>
+        <div class="r"><span>Draft</span><p><del>...with four years leading a team of 7 Android and iOS engineers</del></p></div>
+        <div class="r"><span>Reviewer</span><div class="comment"><b>FIX</b><p class="why">The fact bank says 5 mobile engineers, 1 backend engineer and 1 QA engineer, and she started with 3 in Apr 2022. So this is wrong twice: the team was not 7 for four years, and it is not 7 mobile engineers.</p></div></div>
+        <div class="r"><span>Shipped</span><p><ins>A team of 7 reports to me, including 5 Android and iOS engineers.</ins></p></div>
       </div>
-      <ol class="chain" aria-label="Precedence, highest first">
-        <li><span class="r">Honesty</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></li>
-        <li><span class="r">Anti-cringe</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></li>
-        <li><span class="r">Voice</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></li>
-        <li><span class="r">Reviewer findings</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></li>
-        <li><span class="r">The ad</span></li>
-      </ol>
-      <ul class="rules">
-        <li><b>Every claim traces to your fact bank.</b><span>A missing fact is asked for or left out. New facts go into the bank first, then into documents.</span></li>
-        <li><b>Durations round down. Headcounts are exact.</b><span>A single report is never made plural. Influence is never written as line management.</span></li>
-        <li><b>A recent skill is not stretched by the length of your career.</b><span>A proof of concept is never written as production experience.</span></li>
-        <li><b>The gate runs before any writing.</b><span>Only on filters you set. A SKIP stops the run unless you override it, and the override is logged.</span></li>
-        <li><b>No dashes, no AI-tell phrases, no flattery.</b><span>No em or en dashes, no praise for the company, no telling readers what they already know.</span></li>
-        <li><b>No hobbies, photos, self-ratings or star counts on a CV.</b><span>Even when the ad asks for "passion". That evidence goes to the letter or the interview.</span></li>
-        <li><b>The author never reviews its own work.</b><span>The reviewer runs as a separate agent or a fresh context, with its own brief.</span></li>
-        <li><b>It never sends anything.</b><span>You read the final text aloud and rewrite at least one sentence in your own words.</span></li>
+      <div class="finding">
+        <h3>2. Inflation: a cause the dates do not allow</h3>
+        <div class="r"><span>Draft</span><p><del>which made weekly releases cheap</del></p></div>
+        <div class="r"><span>Why</span><p class="why">Weekly releases started in Jan 2023 and the build cut was Feb 2024, so the build work cannot have made weekly releases possible.</p></div>
+        <div class="r"><span>Shipped</span><p><ins>Sponsored the Android CI work that cut build time from 38 to 14 minutes, Feb 2024.</ins></p></div>
+      </div>
+      <div class="finding">
+        <h3>3. AI tells and voice</h3>
+        <div class="r"><span>Draft</span><p><del>The team chose to keep two native apps, and I can explain why.</del></p></div>
+        <div class="r"><span>Why</span><p class="why">No first person in CV bullets, and "I can explain why" teases the reader instead of stating a fact.</p></div>
+        <div class="r"><span>Shipped</span><p><ins>Built a Kotlin Multiplatform proof of concept for shared pricing logic, Jun 2024. Not shipped: the team chose to keep two native apps.</ins></p></div>
+      </div>
+      <div class="finding">
+        <h3>4. A claim the fact bank did not hold</h3>
+        <div class="r"><span>Draft</span><p>Full right to work in the UK, no sponsorship needed</p></div>
+        <div class="r"><span>Why</span><p class="why">A factual claim about her status that the bank did not hold. If it is wrong, it ends the process.</p></div>
+        <div class="r"><span>Then</span><p>She confirmed it, it went into the fact bank with a dated change log line, and only then stayed on the CV.</p></div>
+      </div>
+      <div class="finding">
+        <h3>5. Length and structure</h3>
+        <div class="r"><span>Draft</span><p><del>Handled 9,000 ticket orders in the first hour of a major on-sale with no downtime, after leading the load testing and adding a virtual queue.</del></p></div>
+        <div class="r"><span>Why</span><p class="why">A 2021 result from her tech lead role sat on page 1 with no company attached, so it read as current app work. Cut from Key Achievements; the Tidewren section carries it.</p></div>
+      </div>
+      <div class="finding">
+        <h3>6. Inflation: the company reshaped to fit the ad</h3>
+        <div class="r"><span>Draft</span><p><del>At Quillmarsh, a bookings marketplace</del></p></div>
+        <div class="r"><span>Why</span><p class="why">The fact bank describes Quillmarsh as a marketplace for hiring tools and garden equipment.</p></div>
+        <div class="r"><span>Shipped</span><p><ins>At Quillmarsh, a marketplace for hiring tools and garden equipment,</ins></p></div>
+      </div>
+      <div class="docfoot"><span>Job Apply</span><a href="https://github.com/me2resh/job-apply/blob/main/skills/job-apply/examples/isolde-brackwater/applications/Brindlecove-Senior-Engineering-Manager-Mobile/review.md">Read the full review.md</a><span>Round 1 of 2</span></div>
+    </article>
+  </div>
+
+  <div class="view" role="tabpanel" id="r-letter" aria-labelledby="t-letter" tabindex="0">
+    <article class="sheet">
+      <div class="dochead"><b>Isolde Brackwater, cover letter, reviewer round 1</b><span>Verdict: <span class="m fix">FIX</span></span></div>
+      <p class="legend">From review.md in the example. All five findings were applied.</p>
+      <div class="finding">
+        <h3>1. Inflation</h3>
+        <div class="r"><span>Draft</span><p><del>I lead a team of 7 Android and iOS engineers at Quillmarsh</del></p></div>
+        <div class="r"><span>Why</span><p class="why">Two of the 7 are a backend engineer and a QA engineer. The letter's first sentence contradicted the CV.</p></div>
+        <div class="r"><span>Shipped</span><p><ins>I lead a team of 7 at Quillmarsh, including 5 Android and iOS engineers.</ins></p></div>
+      </div>
+      <div class="finding">
+        <h3>2. Inflation: claiming the whole test</h3>
+        <div class="r"><span>Draft</span><p><del>With our product manager and designer I ran a 6-week A/B test of a new checkout.</del></p></div>
+        <div class="r"><span>Why</span><p class="why">The fact bank gives her the engineering side and the experiment flags. The product manager owned the hypothesis and the designer designed the flow.</p></div>
+        <div class="r"><span>Shipped</span><p><ins>I led the engineering side of a 6-week A/B test of a new checkout, with our product manager and designer.</ins></p></div>
+      </div>
+      <div class="finding">
+        <h3>3. Wrong tone for the reader</h3>
+        <div class="r"><span>Draft</span><p><del>because the hiring bar is the manager's job</del></p></div>
+        <div class="r"><span>Why</span><p class="why">It explains the basics of management to a CTO.</p></div>
+        <div class="r"><span>Shipped</span><p><ins>I wrote the interview loop and ran every final interview.</ins></p></div>
+      </div>
+      <div class="finding">
+        <h3>4. Neediness and AI tells</h3>
+        <div class="r"><span>Draft</span><p><del>I would happily walk you through that call, because it was not the obvious one.</del></p></div>
+        <div class="r"><span>Why</span><p class="why">A teaser that hints at a story instead of giving the fact.</p></div>
+        <div class="r"><span>Shipped</span><p><ins>I would happily walk you through how we made that call.</ins></p></div>
+      </div>
+      <div class="finding">
+        <h3>5. Reader-blindness</h3>
+        <div class="r"><span>Draft</span><p><del>I would like to do that for the Senior Engineering Manager, Mobile role.</del></p></div>
+        <div class="r"><span>Why</span><p class="why">It tells them their own job title back, and the company is never named in the letter.</p></div>
+        <div class="r"><span>Shipped</span><p><ins>I would like to do that at Brindlecove.</ins></p></div>
+      </div>
+      <div class="docfoot"><span>Job Apply</span><a href="samples/Isolde-Brackwater-Cover-Letter.pdf">Open the sent letter as a PDF</a><span>Round 1 of 2</span></div>
+    </article>
+  </div>
+
+  <div class="view" role="tabpanel" id="r-r2" aria-labelledby="t-r2" tabindex="0">
+    <article class="sheet">
+      <div class="dochead"><b>Isolde Brackwater, CV and letter, reviewer round 2</b><span>Verdict: <span class="m ok">SHIP</span></span></div>
+      <p class="legend">From review.md in the example.</p>
+      <p><b class="sans">Read test, CV.</b> An engineering manager with four years in the role and a team of 7, including 5 Android and iOS engineers. Page 1 answers the ad's top three criteria in its own words and with numbers.</p>
+      <div class="finding">
+        <h3>1. Optional polish, applied in a shorter form</h3>
+        <div class="r"><span>Draft</span><p><del>Engineering manager for consumer mobile apps, with four years as an engineering manager</del></p></div>
+        <div class="r"><span>Why</span><p class="why">"Engineering manager" twice in one sentence; it stumbles when read aloud.</p></div>
+        <div class="r"><span>Shipped</span><p><ins>Engineering manager for consumer mobile apps: four years in the role and 14 years building software.</ins></p></div>
+      </div>
+      <p><b class="sans">Cover letter.</b> SHIP, no findings.</p>
+      <div class="docfoot"><span>Job Apply</span><a href="samples/Isolde-Brackwater-CV.pdf">Open the sent CV as a PDF</a><span>Round 2 of 2</span></div>
+    </article>
+  </div>
+
+  <h3 style="margin:36px 0 6px;font-size:20px;font-weight:600">What an interviewer would ask</h3>
+  <p class="lead" style="margin-bottom:14px">Every round also returns the questions the documents invite. That list is your interview prep. A few from round 1:</p>
+  <ul class="qs">
+    <li>What the team actually looks like, and when it reached 7.</li>
+    <li>How much of the 97.1% to 99.6% gain came from the gate and the triage, and how much from the engineers' fixes.</li>
+    <li>Why the Kotlin Multiplatform proof of concept did not ship.</li>
+    <li>Taking the team from 6 to 10 with no experience managing managers.</li>
+  </ul>
+</section>
+
+<section id="example">
+  <h2>What a finished application looks like</h2>
+  <p class="lead">One invented person, end to end: Isolde Brackwater, a mobile engineering manager in Leeds, applying for a Senior Engineering Manager, Mobile role at Brindlecove. Every person, company, number and link in it is invented. The sent documents open as PDFs.</p>
+  <article class="sheet">
+    <div class="dochead"><b>Brindlecove, Senior Engineering Manager, Mobile</b><span>Sent 28 October 2026</span></div>
+    <p class="legend">Gate verdict APPLY. Two reviewer rounds. Every number below traces to a fact id.</p>
+    <h3>Key Achievements, with the fact behind each line</h3>
+    <table>
+      <thead><tr><th>On the CV</th><th>In the fact bank</th></tr></thead>
+      <tr><td>Raised crash-free sessions from 97.1% to 99.6% in a year by putting a release health gate on every staged rollout and running weekly crash triage.</td><td><span class="m ok">QM-01</span> Q3 2022 to Q2 2023. Her part: the gate and the triage. The team's: the fixes.</td></tr>
+      <tr><td>Moved both apps from monthly to weekly releases with staged rollouts: 46 releases in 2023, against 11 the year before.</td><td><span class="m ok">QM-02</span> From Jan 2023. Her part: proposed and ran it, wrote the checklist.</td></tr>
+      <tr><td>Lifted in-app booking conversion from 18% to 23% through a 6-week A/B test of a new checkout, run with the product manager and designer.</td><td><span class="m ok">QM-03</span> Sep to Oct 2023. Her part: the engineering side and the experiment flags.</td></tr>
+      <tr><td>Grew the mobile team from 3 to 7 with 4 hires in 2023, no regretted leavers since 2022, and 2 engineers promoted.</td><td><span class="m ok">QM-04</span> Her part: the interview loop and every final interview.</td></tr>
+    </table>
+    <h3>The tracker</h3>
+    <table>
+      <thead><tr><th>Role</th><th>Verdict</th><th>Why</th></tr></thead>
+      <tr><td>Brindlecove, Senior Engineering Manager, Mobile</td><td><span class="m ok">APPLY</span></td><td>Every gate passes. Prepare an answer on managing managers.</td></tr>
+      <tr><td>Glintmoor Metrics, Head of Mobile</td><td><span class="m fix">SKIP</span></td><td>Core product is in-app ad attribution, an industry she excluded.</td></tr>
+      <tr><td>Unnamed company, via a recruiter</td><td><span class="m inf">QUALIFY FIRST</span></td><td>No company name, so the industry gate cannot run. Ask for the name and the band.</td></tr>
+    </table>
+    <div class="docfoot"><span>Job Apply</span><span><a href="samples/Isolde-Brackwater-CV.pdf">Open the CV (PDF, 2 pages)</a> &middot; <a href="samples/Isolde-Brackwater-Cover-Letter.pdf">Open the cover letter (PDF)</a> &middot; <a href="https://github.com/me2resh/job-apply/tree/main/skills/job-apply/examples/isolde-brackwater">See every file</a></span></div>
+  </article>
+</section>
+
+<section id="install">
+  <h2>Install it in your agent</h2>
+  <p class="lead">Pick your agent. It needs Python 3 (standard library only) and Chrome, Chromium, Edge or Brave for the PDFs.</p>
+  <div class="tabs" role="tablist" aria-label="Your agent">
+    <button role="tab" id="t-claude" aria-controls="i-claude" aria-selected="true" type="button">Claude Code</button>
+    <button role="tab" id="t-codex" aria-controls="i-codex" aria-selected="false" tabindex="-1" type="button">Codex</button>
+    <button role="tab" id="t-cursor" aria-controls="i-cursor" aria-selected="false" tabindex="-1" type="button">Cursor</button>
+    <button role="tab" id="t-copilot" aria-controls="i-copilot" aria-selected="false" tabindex="-1" type="button">GitHub Copilot</button>
+    <button role="tab" id="t-other" aria-controls="i-other" aria-selected="false" tabindex="-1" type="button">Other agents</button>
+  </div>
+  <div class="install">
+    <div>
+      <div class="view" role="tabpanel" id="i-claude" aria-labelledby="t-claude" tabindex="0">
+        <p>One line, as a plugin. The skill then answers to <code>/job-apply</code> and adds the <code>job-apply-reviewer</code> agent.</p>
+        <div class="cmd"><pre><code id="c1">/plugin install job-apply --marketplace me2resh/job-apply</code></pre><button class="copy" type="button" data-copy="c1">Copy</button></div>
+        <p class="note">Older versions: <code>/plugin marketplace add me2resh/job-apply</code>, then <code>/plugin install job-apply@job-apply</code>. From a shell: <code>claude plugin install job-apply --marketplace me2resh/job-apply</code>.</p>
+      </div>
+      <div class="view" role="tabpanel" id="i-codex" aria-labelledby="t-codex" tabindex="0">
+        <p>Codex reads skills from <code>~/.codex/skills</code>. The installer copies the folder there.</p>
+        <div class="cmd"><pre><code id="c2">git clone https://github.com/me2resh/job-apply
+cd job-apply
+./install.sh codex</code></pre><button class="copy" type="button" data-copy="c2">Copy</button></div>
+        <p class="note">Without the plugin agent, the reviewer runs as a fresh context with <code>references/reviewer.md</code> as its brief.</p>
+      </div>
+      <div class="view" role="tabpanel" id="i-cursor" aria-labelledby="t-cursor" tabindex="0">
+        <p>Cursor uses project rules. Copy the rule file into your project.</p>
+        <div class="cmd"><pre><code id="c3">git clone https://github.com/me2resh/job-apply
+mkdir -p .cursor/rules
+cp job-apply/.cursor/rules/job-apply.mdc .cursor/rules/</code></pre><button class="copy" type="button" data-copy="c3">Copy</button></div>
+      </div>
+      <div class="view" role="tabpanel" id="i-copilot" aria-labelledby="t-copilot" tabindex="0">
+        <p>Copilot reads repository instructions. Copy the instructions file into your project.</p>
+        <div class="cmd"><pre><code id="c4">git clone https://github.com/me2resh/job-apply
+mkdir -p .github
+cp job-apply/.github/copilot-instructions.md .github/</code></pre><button class="copy" type="button" data-copy="c4">Copy</button></div>
+        <p class="note">If your project already has <code>copilot-instructions.md</code>, append the text instead of replacing it.</p>
+      </div>
+      <div class="view" role="tabpanel" id="i-other" aria-labelledby="t-other" tabindex="0">
+        <p>Any agent that reads a folder with a <code>SKILL.md</code> can use it.</p>
+        <div class="cmd"><pre><code id="c5">git clone https://github.com/me2resh/job-apply
+cd job-apply
+./install.sh /path/to/your/agent/skills</code></pre><button class="copy" type="button" data-copy="c5">Copy</button></div>
+        <p class="note">For agents with a single instructions file, add <code>AGENTS.md</code> to it and keep <code>skills/job-apply/</code> readable by the agent.</p>
+      </div>
+    </div>
+    <div>
+      <p class="lead">Then ask the way you would ask a friend who reads CVs for a living.</p>
+      <ul class="ask">
+        <li>Set up job apply.</li>
+        <li>Should I apply for this? https://...</li>
+        <li>Tailor my CV and write a cover letter for this ad.</li>
+        <li>Reply to this recruiter: ...</li>
       </ul>
-    </section>
-
-    <section id="review" aria-labelledby="review-h">
-      <div class="verdict">
-        <span class="big" aria-hidden="true">FIX</span>
-        <div class="prose">
-          <h2 id="review-h">Round 1 said FIX</h2>
-          <p class="lede">The reviewer works from the ad, the fact bank and the voice file, and nothing the writer thought. On the example's first drafts it caught two real inflation errors. Here are its findings, lightly trimmed, and what changed.</p>
-        </div>
-      </div>
-
-      <div class="tabs" role="tablist" aria-label="Reviewer rounds">
-        <button role="tab" id="t-cv" aria-controls="p-cv" aria-selected="true" type="button"><span>CV<span class="wide">, round 1</span></span> <span class="tok fix">FIX</span></button>
-        <button role="tab" id="t-letter" aria-controls="p-letter" aria-selected="false" tabindex="-1" type="button"><span>Letter<span class="wide">, round 1</span></span> <span class="tok fix">FIX</span></button>
-        <button role="tab" id="t-r2" aria-controls="p-r2" aria-selected="false" tabindex="-1" type="button">Round 2 <span class="tok ship">SHIP</span></button>
-      </div>
-
-      <div class="panel" role="tabpanel" id="p-cv" aria-labelledby="t-cv" tabindex="0">
-        <p class="read"><b>READ TEST:</b> A mobile engineering manager whose page 1 covers the JD's top three criteria in its own words, but the first line of the Profile says the team is "7 Android and iOS engineers", and the scope line under it says only 5 are mobile engineers.</p>
-        <ol class="findings">
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>1</b> &middot; Inflation</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied</span></div>
-            <div class="line del"><span class="ln"></span><span class="sg" aria-hidden="true">-</span><span class="tx"><span class="vh">Draft: </span>with four years leading a team of 7 Android and iOS engineers</span></div>
-            <div class="line add"><span class="ln"></span><span class="sg" aria-hidden="true">+</span><span class="tx"><span class="vh">Fix: </span>A team of 7 reports to me, including 5 Android and iOS engineers.</span></div>
-            <div class="why"><p><span class="lab">WHY</span>The fact bank says 5 mobile engineers, 1 backend engineer and 1 QA engineer, and she started with 3 in Apr 2022. So this is wrong twice: the team was not 7 for four years, and it is not 7 mobile engineers. The scope line on the same page contradicts it, and the JD's first essential criterion is exactly this.</p></div>
-          </div></li>
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>2</b> &middot; Inflation</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied</span></div>
-            <div class="line del"><span class="ln"></span><span class="sg" aria-hidden="true">-</span><span class="tx"><span class="vh">Draft: </span>which made weekly releases cheap</span></div>
-            <div class="line add"><span class="ln"></span><span class="sg" aria-hidden="true">+</span><span class="tx"><span class="vh">Fix: </span>Sponsored the Android CI work that cut build time from 38 to 14 minutes, Feb 2024.</span></div>
-            <div class="why"><p><span class="lab">WHY</span>Weekly releases started in Jan 2023 and the build cut was Feb 2024, so the build work cannot have made weekly releases possible. A hiring manager who checks the dates catches a made-up cause.</p></div>
-          </div></li>
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>3</b> &middot; AI tells and voice</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied</span></div>
-            <div class="line del"><span class="ln"></span><span class="sg" aria-hidden="true">-</span><span class="tx"><span class="vh">Draft: </span>The team chose to keep two native apps, and I can explain why.</span></div>
-            <div class="line add"><span class="ln"></span><span class="sg" aria-hidden="true">+</span><span class="tx"><span class="vh">Fix: </span>Built a Kotlin Multiplatform proof of concept for shared pricing logic, Jun 2024. Not shipped: the team chose to keep two native apps.</span></div>
-            <div class="why"><p><span class="lab">WHY</span>The voice file says no first person in CV bullets, and "I can explain why" teases the reader instead of stating a fact.</p></div>
-          </div></li>
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>4</b> &middot; Inflation</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied after a fact bank update</span></div>
-            <div class="line ctx"><span class="ln"></span><span class="sg" aria-hidden="true"> </span><span class="tx">Full right to work in the UK, no sponsorship needed</span></div>
-            <div class="why"><p><span class="lab">WHY</span>This is a factual claim about her status, and the fact bank does not hold it. If it is wrong, it ends the process.</p><p><span class="lab">THEN</span>Isolde confirmed it, it went into the fact bank first with a dated change log line, and only then stayed on the CV.</p></div>
-          </div></li>
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>5</b> &middot; Length and structure</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied</span></div>
-            <div class="line del"><span class="ln"></span><span class="sg" aria-hidden="true">-</span><span class="tx"><span class="vh">Cut from Key Achievements: </span>Handled 9,000 ticket orders in the first hour of a major on-sale with no downtime, after leading the load testing and adding a virtual queue.</span></div>
-            <div class="why"><p><span class="lab">WHY</span>A 2021 result from her tech lead role sits on page 1 with no company or role attached, so it reads as current app work. It answers none of the JD's criteria. Cut from Key Achievements; the Tidewren section carries it.</p></div>
-          </div></li>
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>6</b> &middot; Inflation</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied</span></div>
-            <div class="line del"><span class="ln"></span><span class="sg" aria-hidden="true">-</span><span class="tx"><span class="vh">Draft: </span>At Quillmarsh, a bookings marketplace</span></div>
-            <div class="line add"><span class="ln"></span><span class="sg" aria-hidden="true">+</span><span class="tx"><span class="vh">Fix: </span>At Quillmarsh, a marketplace for hiring tools and garden equipment,</span></div>
-            <div class="why"><p><span class="lab">WHY</span>The fact bank describes Quillmarsh as a marketplace for hiring tools and garden equipment. "Bookings marketplace" looks reshaped to match the hiring company's own pitch.</p></div>
-          </div></li>
-        </ol>
-      </div>
-
-      <div class="panel" role="tabpanel" id="p-letter" aria-labelledby="t-letter" tabindex="0">
-        <p class="read"><b>READ TEST:</b> A manager who fixed app stability and release cadence with real numbers, then used that to run a checkout experiment and grow the team, but the opening line overstates how many of her 7 are Android and iOS engineers.</p>
-        <ol class="findings">
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>1</b> &middot; Inflation</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied</span></div>
-            <div class="line del"><span class="ln"></span><span class="sg" aria-hidden="true">-</span><span class="tx"><span class="vh">Draft: </span>I lead a team of 7 Android and iOS engineers at Quillmarsh</span></div>
-            <div class="line add"><span class="ln"></span><span class="sg" aria-hidden="true">+</span><span class="tx"><span class="vh">Fix: </span>I lead a team of 7 at Quillmarsh, including 5 Android and iOS engineers.</span></div>
-            <div class="why"><p><span class="lab">WHY</span>Two of the 7 are a backend engineer and a QA engineer. The letter's first sentence contradicted the CV on the JD's first essential criterion.</p></div>
-          </div></li>
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>2</b> &middot; Inflation</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied</span></div>
-            <div class="line del"><span class="ln"></span><span class="sg" aria-hidden="true">-</span><span class="tx"><span class="vh">Draft: </span>With our product manager and designer I ran a 6-week A/B test of a new checkout.</span></div>
-            <div class="line add"><span class="ln"></span><span class="sg" aria-hidden="true">+</span><span class="tx"><span class="vh">Fix: </span>I led the engineering side of a 6-week A/B test of a new checkout, with our product manager and designer.</span></div>
-            <div class="why"><p><span class="lab">WHY</span>The fact bank gives her the engineering side and the experiment flags. The product manager owned the hypothesis and the designer designed the flow. "I ran" claims the whole test.</p></div>
-          </div></li>
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>3</b> &middot; Wrong tone for the reader</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied</span></div>
-            <div class="line del"><span class="ln"></span><span class="sg" aria-hidden="true">-</span><span class="tx"><span class="vh">Draft: </span>because the hiring bar is the manager's job</span></div>
-            <div class="line add"><span class="ln"></span><span class="sg" aria-hidden="true">+</span><span class="tx"><span class="vh">Fix: </span>I wrote the interview loop and ran every final interview.</span></div>
-            <div class="why"><p><span class="lab">WHY</span>It explains the basics of management to a CTO.</p></div>
-          </div></li>
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>4</b> &middot; Neediness and AI tells</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied</span></div>
-            <div class="line del"><span class="ln"></span><span class="sg" aria-hidden="true">-</span><span class="tx"><span class="vh">Draft: </span>I would happily walk you through that call, because it was not the obvious one.</span></div>
-            <div class="line add"><span class="ln"></span><span class="sg" aria-hidden="true">+</span><span class="tx"><span class="vh">Fix: </span>I would happily walk you through how we made that call.</span></div>
-            <div class="why"><p><span class="lab">WHY</span>A teaser that hints at a story instead of giving the one fact that would make the reader want it.</p></div>
-          </div></li>
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>5</b> &middot; Reader-blindness</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied</span></div>
-            <div class="line del"><span class="ln"></span><span class="sg" aria-hidden="true">-</span><span class="tx"><span class="vh">Draft: </span>I would like to do that for the Senior Engineering Manager, Mobile role.</span></div>
-            <div class="line add"><span class="ln"></span><span class="sg" aria-hidden="true">+</span><span class="tx"><span class="vh">Fix: </span>I would like to do that at Brindlecove.</span></div>
-            <div class="why"><p><span class="lab">WHY</span>It tells them their own job title back, and the company is never named anywhere in the letter.</p></div>
-          </div></li>
-        </ol>
-      </div>
-
-      <div class="panel" role="tabpanel" id="p-r2" aria-labelledby="t-r2" tabindex="0">
-        <p class="read"><b>READ TEST, CV:</b> An engineering manager with four years in the role and a team of 7, including 5 Android and iOS engineers. Page 1 answers the JD's top three criteria in its own words and with numbers.</p>
-        <ol class="findings">
-          <li class="finding"><div class="hunk">
-            <div class="hunk-head"><span><b>1</b> &middot; Wrong tone for the reader &middot; optional polish</span><span class="applied"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>Applied, shorter</span></div>
-            <div class="line del"><span class="ln"></span><span class="sg" aria-hidden="true">-</span><span class="tx"><span class="vh">Draft: </span>Engineering manager for consumer mobile apps, with four years as an engineering manager</span></div>
-            <div class="line add"><span class="ln"></span><span class="sg" aria-hidden="true">+</span><span class="tx"><span class="vh">Fix: </span>Engineering manager for consumer mobile apps: four years in the role and 14 years building software.</span></div>
-            <div class="why"><p><span class="lab">WHY</span>The first sentence says "engineering manager" twice, so it stumbles when read aloud.</p></div>
-          </div></li>
-        </ol>
-        <p class="read" style="margin-top:24px"><b>Cover letter:</b> <span class="tok ship">SHIP</span> Findings: none.</p>
-      </div>
-
-      <div class="challenge">
-        <h3>What an interviewer would ask</h3>
-        <p class="lede" style="font-size:1rem">Every round also returns the questions the documents invite. That list is the interview prep. A few from round 1:</p>
-        <ul>
-          <li>What the team actually looks like, and when it reached 7.</li>
-          <li>How much of the 97.1% to 99.6% gain came from the gate and the triage, and how much from the engineers' fixes.</li>
-          <li>Why the Kotlin Multiplatform proof of concept did not ship.</li>
-          <li>Taking the team from 6 to 10 with no experience managing managers.</li>
-        </ul>
-      </div>
-    </section>
-
-    <section id="sample" aria-labelledby="sample-h">
-      <div class="sec-head">
-        <h2 id="sample-h">Every line points at a fact</h2>
-        <p class="lede">The shipped CV, next to the facts it was built from. Pick a fact id to see which lines it backs.</p>
-      </div>
-      <div class="trace" id="trace">
-        <div class="hunk">
-          <div class="hunk-head"><span><b>cv.md</b> &middot; Key Achievements, as sent</span><span>blame</span></div>
-          <div class="line ctx" data-cites="QM-01"><span class="tx">Raised crash-free sessions from 97.1% to 99.6% in a year by putting a release health gate on every staged rollout and running weekly crash triage.</span><span class="bl"><button class="fid" type="button" data-fact="QM-01" aria-pressed="false">QM-01</button></span></div>
-          <div class="line ctx" data-cites="QM-02"><span class="tx">Moved both apps from monthly to weekly releases with staged rollouts: 46 releases in 2023, against 11 the year before.</span><span class="bl"><button class="fid" type="button" data-fact="QM-02" aria-pressed="false">QM-02</button></span></div>
-          <div class="line ctx" data-cites="QM-03"><span class="tx">Lifted in-app booking conversion from 18% to 23% through a 6-week A/B test of a new checkout, run with the product manager and designer.</span><span class="bl"><button class="fid" type="button" data-fact="QM-03" aria-pressed="false">QM-03</button></span></div>
-          <div class="line ctx" data-cites="QM-04"><span class="tx">Grew the mobile team from 3 to 7 with 4 hires in 2023, no regretted leavers since 2022, and 2 engineers promoted.</span><span class="bl"><button class="fid" type="button" data-fact="QM-04" aria-pressed="false">QM-04</button></span></div>
-        </div>
-        <div class="file">
-          <div class="hunk-head"><b>fact-bank.md</b><span>Quillmarsh, achievements</span></div>
-          <ul class="facts">
-            <li class="fact" data-cites="QM-01"><b>QM-01 Crash-free sessions.</b> 97.1% to 99.6%, Q3 2022 to Q2 2023. <span class="c">My part: set the release health gate and ran the weekly crash triage. Team part: the engineers fixed the crashes.</span></li>
-            <li class="fact" data-cites="QM-02"><b>QM-02 Release cadence.</b> Monthly to weekly from Jan 2023. 46 releases in 2023, against 11 in 2022. <span class="c">My part: proposed and ran the change; wrote the release checklist. Team part: the QA engineer automated the smoke suite.</span></li>
-            <li class="fact" data-cites="QM-03"><b>QM-03 Checkout conversion.</b> 18% to 23%, 6-week A/B test, Sep to Oct 2023. <span class="c">My part: led the engineering side and set up the experiment flags. Team part: the designer designed the flow; the product manager owned the hypothesis.</span></li>
-            <li class="fact" data-cites="QM-04"><b>QM-04 Hiring and growth.</b> Team from 3 to 7; 4 hires in 2023. No regretted leavers since Apr 2022. 2 promotions. <span class="c">My part: wrote the interview loop and ran every final interview.</span></li>
-          </ul>
-        </div>
-      </div>
-      <p class="trace-hint" id="trace-status" aria-live="polite"></p>
-
-      <div class="pdfs">
-        <a class="pdf" href="samples/Isolde-Brackwater-CV.pdf"><b>The CV</b><span>Two pages, rendered with the modern print style.</span><code>Isolde-Brackwater-CV.pdf</code></a>
-        <a class="pdf" href="samples/Isolde-Brackwater-Cover-Letter.pdf"><b>The cover letter</b><span>Under 350 words, after both review rounds.</span><code>Isolde-Brackwater-Cover-Letter.pdf</code></a>
-        <a class="pdf" href="https://github.com/me2resh/job-apply/tree/main/skills/job-apply/examples/isolde-brackwater"><b>The whole run</b><span>Fact bank, profile, voice, the ad, gate and mapping, both reviews, form answers.</span><code>examples/isolde-brackwater/</code></a>
-      </div>
-      <p class="invented">Isolde Brackwater does not exist. She is a mobile engineering manager in Leeds applying to Brindlecove, and every person, company, number and link in her example is invented.</p>
-    </section>
-
-    <section id="install" class="inst" aria-labelledby="install-h">
-      <div class="sec-head">
-        <h2 id="install-h">Install</h2>
-        <p class="lede">Then ask: "Set up job apply". Later: "Apply for this: https://..." or "Reply to this recruiter: ...".</p>
-      </div>
-      <div class="tabs" role="tablist" aria-label="Your tool">
-        <button role="tab" id="i-cc" aria-controls="ip-cc" aria-selected="true" type="button">Claude Code</button>
-        <button role="tab" id="i-cx" aria-controls="ip-cx" aria-selected="false" tabindex="-1" type="button">Codex</button>
-        <button role="tab" id="i-cu" aria-controls="ip-cu" aria-selected="false" tabindex="-1" type="button">Cursor</button>
-        <button role="tab" id="i-gh" aria-controls="ip-gh" aria-selected="false" tabindex="-1" type="button">GitHub Copilot</button>
-        <button role="tab" id="i-ot" aria-controls="ip-ot" aria-selected="false" tabindex="-1" type="button">Other agents</button>
-      </div>
-      <div class="panel" role="tabpanel" id="ip-cc" aria-labelledby="i-cc" tabindex="0">
-        <p>One line, inside Claude Code:</p>
-        <div class="cmd"><code id="c1">/plugin install job-apply --marketplace me2resh/job-apply</code><button class="copy" type="button" data-copy="c1"><svg class="i-copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><svg class="i-done" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span>Copy</span></button></div>
-        <p>Older Claude Code, two steps:</p>
-        <div class="cmd"><code id="c2">/plugin marketplace add me2resh/job-apply
-/plugin install job-apply@job-apply</code><button class="copy" type="button" data-copy="c2"><svg class="i-copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><svg class="i-done" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span>Copy</span></button></div>
-        <p>From the shell:</p>
-        <div class="cmd"><code id="c3">claude plugin install job-apply --marketplace me2resh/job-apply</code><button class="copy" type="button" data-copy="c3"><svg class="i-copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><svg class="i-done" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span>Copy</span></button></div>
-        <p>The skill answers to <code>/job-apply</code>, and the plugin adds the <code>job-apply-reviewer</code> agent.</p>
-      </div>
-      <div class="panel" role="tabpanel" id="ip-cx" aria-labelledby="i-cx" tabindex="0">
-        <p>Clone the repo, then copy the skill into <code>~/.codex/skills/</code>:</p>
-        <div class="cmd"><code id="c4">git clone https://github.com/me2resh/job-apply
-cd job-apply &amp;&amp; ./install.sh codex</code><button class="copy" type="button" data-copy="c4"><svg class="i-copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><svg class="i-done" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span>Copy</span></button></div>
-        <p>Without the plugin agent, the reviewer runs as a fresh context with <code>references/reviewer.md</code> as its brief.</p>
-      </div>
-      <div class="panel" role="tabpanel" id="ip-cu" aria-labelledby="i-cu" tabindex="0">
-        <p>Copy the rule file into your project:</p>
-        <div class="cmd"><code id="c5">mkdir -p .cursor/rules &amp;&amp; cp job-apply/.cursor/rules/job-apply.mdc .cursor/rules/</code><button class="copy" type="button" data-copy="c5"><svg class="i-copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><svg class="i-done" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span>Copy</span></button></div>
-        <p>Run it from the folder that holds your clone of the repo.</p>
-      </div>
-      <div class="panel" role="tabpanel" id="ip-gh" aria-labelledby="i-gh" tabindex="0">
-        <p>Copy <code>.github/copilot-instructions.md</code> into your project, or append its text to the instructions you already have.</p>
-        <div class="cmd"><code id="c6">mkdir -p .github &amp;&amp; cat job-apply/.github/copilot-instructions.md &gt;&gt; .github/copilot-instructions.md</code><button class="copy" type="button" data-copy="c6"><svg class="i-copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><svg class="i-done" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span>Copy</span></button></div>
-      </div>
-      <div class="panel" role="tabpanel" id="ip-ot" aria-labelledby="i-ot" tabindex="0">
-        <p>Any agent that reads the Agent Skills format can use the same folder. Copy it into that agent's skills directory:</p>
-        <div class="cmd"><code id="c7">./install.sh /path/to/your/agent/skills</code><button class="copy" type="button" data-copy="c7"><svg class="i-copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg><svg class="i-done" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span>Copy</span></button></div>
-        <p>Anything else: add the <code>AGENTS.md</code> text to its instructions and keep <code>skills/job-apply/</code> where it can read it.</p>
-      </div>
-
-      <div class="needs">
-        <div><h3>Needs</h3><p>Python 3, standard library only. Chrome, Chromium, Edge or Brave for the PDFs; set <code>CHROME=/path</code> to pick one.</p></div>
-        <div><h3>Optional</h3><p><code>pdftotext</code> from poppler, or <code>pip install pypdf</code>, turns on the PDF page-end and text-layer checks.</p></div>
-        <div><h3>Your data</h3><p>One folder you choose at setup, suggested <code>~/job-apply/</code>. Nothing leaves your machine except the job ad fetches.</p></div>
-      </div>
-    </section>
+      <p class="note" style="margin-top:12px">Optional: <code>pdftotext</code> or <code>pip install pypdf</code> turns on the PDF text-layer checks.</p>
+    </div>
   </div>
-</main>
+</section>
 
-<footer class="foot">
-  <div class="col">
-    <span>MIT licence. <a href="https://github.com/me2resh/job-apply">Source on GitHub</a>.</span>
-    <span>Made by <a href="https://github.com/me2resh/job-apply">Ahmed Mohamed</a></span>
-  </div>
+<section id="rules">
+  <h2>Eight things it will not do</h2>
+  <p class="order">When two rules pull apart: <b>honesty</b>, then <b>anti-cringe</b>, then <b>voice</b>, then <b>reviewer findings</b>, then <b>the ad</b>.</p>
+  <ul class="rules">
+    <li><b>Claim what the bank cannot back.</b><span>Every line traces to your fact bank. A missing fact is asked for or left out.</span></li>
+    <li><b>Round up.</b><span>Durations round down, headcounts are exact, and a single report is never made plural.</span></li>
+    <li><b>Call influence management.</b><span>Influence is never written as line management, and a proof of concept is never production experience.</span></li>
+    <li><b>Stretch a recent skill.</b><span>A skill you picked up recently is not stretched by the length of your whole career.</span></li>
+    <li><b>Write before the gate.</b><span>The verdict comes first, on filters you set. A SKIP stops the run unless you override it, and the override is logged.</span></li>
+    <li><b>Sound like a machine.</b><span>No dashes, no AI-tell phrases, no flattery about the company, no telling readers what they already know.</span></li>
+    <li><b>Review its own work.</b><span>The reviewer is a separate agent or a fresh context, with its own brief.</span></li>
+    <li><b>Send anything.</b><span>You do, after reading it aloud and rewriting at least one sentence in your own words.</span></li>
+  </ul>
+</section>
+
+<footer>
+  <p>Job Apply is MIT licensed. <a href="https://github.com/me2resh/job-apply">Source on GitHub</a>. Isolde Brackwater and every company on this page are invented.</p>
+  <p>Made by <a href="https://github.com/me2resh/job-apply">Ahmed Mohamed</a></p>
 </footer>
-
+</div>
 <script>
-(function () {
-  var root = document.documentElement;
-  root.classList.add("js");
-
-  // Copy buttons
-  document.querySelectorAll("[data-copy]").forEach(function (btn) {
-    var label = btn.querySelector("span");
-    btn.addEventListener("click", function () {
-      var src = document.getElementById(btn.getAttribute("data-copy"));
-      var text = src ? src.textContent : "";
-      var done = function () {
-        btn.setAttribute("data-done", "");
-        label.textContent = "Copied";
-        clearTimeout(btn._t);
-        btn._t = setTimeout(function () { btn.removeAttribute("data-done"); label.textContent = "Copy"; }, 2000);
-      };
-      var fail = function () {
-        var r = document.createRange(); r.selectNodeContents(src);
-        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-        label.textContent = "Press Ctrl+C";
-      };
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(done, fail);
-      } else { fail(); }
-    });
-    btn.setAttribute("aria-live", "polite");
+document.querySelectorAll('[role="tablist"]').forEach(function(list){
+  var tabs=[].slice.call(list.querySelectorAll('[role="tab"]'));
+  function select(tab,focus){tabs.forEach(function(t){var on=t===tab;t.setAttribute('aria-selected',on?'true':'false');t.tabIndex=on?0:-1;var p=document.getElementById(t.getAttribute('aria-controls'));if(p)p.hidden=!on;});if(focus)tab.focus();}
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){select(t,false)});
+    t.addEventListener('keydown',function(e){var n=null;
+      if(e.key==='ArrowRight')n=tabs[(i+1)%tabs.length];else if(e.key==='ArrowLeft')n=tabs[(i-1+tabs.length)%tabs.length];else if(e.key==='Home')n=tabs[0];else if(e.key==='End')n=tabs[tabs.length-1];
+      if(n){e.preventDefault();select(n,true);}});
   });
-
-  // Tabs, with arrow keys
-  document.querySelectorAll('[role="tablist"]').forEach(function (list) {
-    var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
-    var select = function (tab, focus) {
-      tabs.forEach(function (t) {
-        var on = t === tab;
-        t.setAttribute("aria-selected", on ? "true" : "false");
-        t.tabIndex = on ? 0 : -1;
-        var p = document.getElementById(t.getAttribute("aria-controls"));
-        if (p) p.hidden = !on;
-      });
-      if (focus) tab.focus();
-    };
-    tabs.forEach(function (t, i) {
-      t.addEventListener("click", function () { select(t, false); });
-      t.addEventListener("keydown", function (e) {
-        var k = e.key, n = null;
-        if (k === "ArrowRight") n = tabs[(i + 1) % tabs.length];
-        else if (k === "ArrowLeft") n = tabs[(i - 1 + tabs.length) % tabs.length];
-        else if (k === "Home") n = tabs[0];
-        else if (k === "End") n = tabs[tabs.length - 1];
-        if (n) { e.preventDefault(); select(n, true); }
-      });
-    });
-    select(tabs.filter(function (t) { return t.getAttribute("aria-selected") === "true"; })[0] || tabs[0], false);
+  select(tabs.filter(function(t){return t.getAttribute('aria-selected')==='true'})[0]||tabs[0],false);
+});
+document.querySelectorAll('.copy').forEach(function(b){
+  b.addEventListener('click',function(){
+    var src=document.getElementById(b.dataset.copy);var text=src?src.textContent:'';
+    function done(){b.textContent='Copied';clearTimeout(b._t);b._t=setTimeout(function(){b.textContent='Copy'},2000);}
+    function fail(){var r=document.createRange();r.selectNodeContents(src);var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Press Ctrl+C';}
+    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(done,fail);}else{fail();}
   });
-
-  // Fact ids light every line that cites them
-  var trace = document.getElementById("trace");
-  var status = document.getElementById("trace-status");
-  if (trace) {
-    var pinned = null;
-    var light = function (id) {
-      trace.querySelectorAll("[data-cites]").forEach(function (el) {
-        el.classList.toggle("is-lit", !!id && el.getAttribute("data-cites").split(" ").indexOf(id) > -1);
-      });
-    };
-    trace.querySelectorAll(".fid").forEach(function (b) {
-      var id = b.getAttribute("data-fact");
-      b.addEventListener("mouseenter", function () { if (!pinned) light(id); });
-      b.addEventListener("mouseleave", function () { if (!pinned) light(null); });
-      b.addEventListener("click", function () {
-        pinned = pinned === id ? null : id;
-        trace.querySelectorAll(".fid").forEach(function (o) { o.setAttribute("aria-pressed", o.getAttribute("data-fact") === pinned ? "true" : "false"); });
-        light(pinned);
-        if (status) {
-          var f = pinned && trace.querySelector('.fact[data-cites="' + pinned + '"] b');
-          status.textContent = pinned ? "Showing the line backed by " + f.textContent.replace(/\.$/, "") + "." : "";
-        }
-      });
-    });
-  }
-
-  // Rail: mark the section in view
-  var links = Array.prototype.slice.call(document.querySelectorAll('.rail nav a'));
-  if ("IntersectionObserver" in window && links.length) {
-    var byId = {};
-    links.forEach(function (a) { byId[a.getAttribute("href").slice(1)] = a; });
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) {
-          links.forEach(function (a) { a.removeAttribute("aria-current"); });
-          var a = byId[en.target.id]; if (a) a.setAttribute("aria-current", "true");
-        }
-      });
-    }, { rootMargin: "-45% 0px -50% 0px" });
-    Object.keys(byId).forEach(function (id) { var s = document.getElementById(id); if (s) io.observe(s); });
-  }
-})();
+  b.setAttribute('aria-live','polite');
+});
 </script>
 </body>
 </html>
